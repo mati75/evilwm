@@ -1,0 +1,116 @@
+evilwm (1.1.0-1) unstable; urgency=low
+
+  * New upstream release (closes: #542343).
+  * Fix interaction with X and signal handler on shutdown (closes: #512548).
+  * Call dh_installmenu (closes: #504065).
+  * Don't strip by default (closes: #436821).
+  * Include basic .desktop file (closes: #330046).
+  * Configuration file $HOME/.evilwmrc read on startup.
+  * evilwm-specific window properties track old dimensions on maximise.
+  * Much larger subset of EWMH 1.3 supported.
+
+ -- Ciaran Anscomb <evilwm@6809.org.uk>  Wed, 30 Sep 2009 08:23:44 +0100
+
+evilwm (1.0.0-1) unstable; urgency=low
+
+  * New upstream release.
+  * EWMH hints added so vdesk/sticky states persist across wm change.
+  * Alt+Tab behaviour modified.
+  * Ability to resize from keyboard added.
+  * New option -altmask.
+  * New option -nosoliddrag.
+  * Fix configure requests containing sibling information.
+  * Only snap against clients on the same screen.
+  * Track vdesk separately on each managed screen.
+  * Keep key bindings when keyboard mapping changes (closes: #364788)
+  * Add basic Xrandr support (thanks to Yura Semashko for this patch).
+  * When snapping, prefer screen edge to other windows.
+
+ -- Ciaran Anscomb <evilwm@6809.org.uk>  Mon, 18 Jun 2007 19:21:59 +0100
+
+evilwm (0.99.21-1) unstable; urgency=low
+
+  * New upstream release.
+  * Fixes positioning error introduced in 0.99.20.
+
+ -- Ciaran Anscomb <evilwm@6809.org.uk>  Mon, 16 Jan 2006 19:04:55 +0000
+
+evilwm (0.99.20-1) unstable; urgency=low
+
+  * New upstream release.
+  * Depend on x-dev, libx11-dev, libxext-dev instead of xlibs-dev
+    (closes: #346656)
+  * Remove dependency on Motif/LessTif headers.
+  * Simplify code to avoid enter events when moving windows around without the
+    mouse.
+  * Exit gracefully when no suitable font is found.
+  * Change frame colouring method.  Allows aterm & others to use "fast
+    transparency".
+  * Remove redundant window map when a new client isn't going to be visible on
+    the current virtual desktop.
+
+ -- Ciaran Anscomb <evilwm@6809.org.uk>  Fri, 13 Jan 2006 12:05:41 +0000
+
+evilwm (0.99.19-1) unstable; urgency=low
+
+  * New upstream release.
+  * Info window movement made a bit more sensible.
+  * Don't remove clients from within error handler, instead flag for removal.
+  * While removing client, only reparent to root if window is withdrawn
+    or window manager is shutting down (fixes xpdf-in-firefox bug).
+  * Window close key with shift held will XKillClient().
+  * LD: Replace logic to decide if we have a shaped window (cribbed from
+    fvwm-2.5.10).
+  * LD: Warp mouse pointer to a visible point in shaped windows.
+
+ -- Ciaran Anscomb <evilwm@6809.org.uk>  Thu,  6 Oct 2005 21:46:14 +0100
+
+evilwm (0.99.18-1) unstable; urgency=low
+
+  * New upstream release.
+  * Fix Alt+Tab crash when there are no clients.
+  * Added -app, -g and -v options to specify geometry and vdesk (incl sticky),
+    for new windows.
+  * Fix so shape information is applied on WM startup.
+  * Allow override of WM modifiers used to grab keys/mouse buttons with
+    -mask1 and -mask2 (closes: #230518)
+  * Merged lots of Larry Doolittle's patches; these are mostly to increase
+    strictness of code.
+  * Removed deprecated 'vdesk' external pager support.
+
+ -- Ciaran Anscomb <evilwm@6809.org.uk>  Thu,  2 Jun 2005 18:24:39 +0100
+
+evilwm (0.99.17-1) unstable; urgency=low
+
+  * New upstream release (closes: #178162)
+  * evilwm now appears as x-window-manager alternative (closes: #193676)
+  * Upstream: Fixes Alt+Tab hanging bug (2002-11-18) (closes: #178166)
+
+ -- Ciaran Anscomb <evilwm@6809.org.uk>  Wed, 15 Oct 2003 12:44:19 +0100
+
+evilwm (0.99.16-1) unstable; urgency=low
+
+  * New upstream release.
+  * lesstif2-dev is an acceptable alternative to lesstif-dev.
+
+ -- Ciaran Anscomb <evilwm@6809.org.uk>  Thu, 18 Sep 2003 16:36:08 +0100
+
+evilwm (0.99.15-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Ciaran Anscomb <evilwm@6809.org.uk>  Sun, 29 Jun 2003 20:53:58 +0100
+
+evilwm (0.99.14-1) unstable; urgency=low
+
+  * New upstream release.
+  * Add postinst/prerm scripts to deal with alternatives.
+
+ -- Ciaran Anscomb <evilwm@6809.org.uk>  Wed, 15 Jan 2003 10:20:04 +0000
+
+evilwm (0.99.7-1) unstable; urgency=low
+
+  * Initial Release.
+  * Changed email addresses to evilwm@6809.org.uk.
+
+ -- Ciaran Anscomb <evilwm@6809.org.uk>  Thu, 15 Aug 2002 14:06:12 +0100
