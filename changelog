@@ -8,8 +8,9 @@ evilwm (1.1.0-1) unstable; urgency=low
   * Configuration file $HOME/.evilwmrc read on startup.
   * evilwm-specific window properties track old dimensions on maximise.
   * Much larger subset of EWMH 1.3 supported.
+  * Better approach to window gravity.
 
- -- Ciaran Anscomb <evilwm@6809.org.uk>  Wed, 30 Sep 2009 08:23:44 +0100
+ -- Ciaran Anscomb <evilwm@6809.org.uk>  Thu, 15 Apr 2010 08:31:11 +0100
 
 evilwm (1.0.0-1) unstable; urgency=low
 
