@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+#  evilwm postinst
+#
+#  Shamelessly ripped off of Marcelo Magallon's script
+#     by Brent Fulgham <bfulgham@debian.org>
+#
+#
+# Ripped off blackbox's postinst, by Matt Hope <dopey@debian.org>
+# and ripped off once again by Nobuhoro Iwamatsu <hemamu@t-base.ne.jp>
+# and also ripped by Mateusz Łukasik <mati75@linuxmint.pl>
+#
+set -e
+
+WMentry="/usr/bin/evilwm"
+
+add_wm_entry ()
+{
+	update-alternatives --install /usr/bin/x-window-manager \
+	x-window-manager $WMentry 20 \
+	--slave /usr/share/man/man1/x-window-manager.1.gz \
+	x-window-manager.1.gz /usr/share/man/man1/evilwm.1.gz
+}
+
+case "$1" in
+    configure)
+
+        add_wm_entry
+
+    ;;
+
+    abort-*)
+        # how did we get here?  Force a non-zero exit code
+        exit 1
+    ;;
+
+    *)
+    ;;
+esac
+
+#DEBHELPER#

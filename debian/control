@@ -1,0 +1,16 @@
+Source: evilwm
+Section: x11
+Priority: optional
+Maintainer: Mateusz Łukasik <mati75@linuxmint.pl>
+Build-Depends: debhelper (>= 9), x11proto-core-dev, libx11-dev, 
+  x11proto-xext-dev, libxrandr-dev
+Standards-Version: 3.9.4
+Homepage: http://www.6809.org.uk/evilwm/
+
+Package: evilwm
+Architecture: any
+Depends: ${shlibs:Depends}
+Provides: x-window-manager
+Description: a minimalist window manager for X11
+ evilwm is based on aewm by Decklin Foster.  It further maximises screen
+ real-estate and provides a good set of keyboard controls.
