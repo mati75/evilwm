@@ -11,7 +11,7 @@ Vcs-Browser: https://github.com/mati75/evilwm.git
 
 Package: evilwm
 Architecture: any
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Provides: x-window-manager
 Description: a minimalist window manager for X11
  evilwm is based on aewm by Decklin Foster.  It further maximises screen
