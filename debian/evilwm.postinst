@@ -8,7 +8,7 @@
 #
 # Ripped off blackbox's postinst, by Matt Hope <dopey@debian.org>
 # and ripped off once again by Nobuhoro Iwamatsu <hemamu@t-base.ne.jp>
-# and also ripped by Mateusz Łukasik <mati75@linuxmint.pl>
+# and also ripped off by Mateusz Łukasik <mati75@linuxmint.pl>
 #
 set -e
 

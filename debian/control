@@ -14,5 +14,8 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Provides: x-window-manager
 Description: a minimalist window manager for X11
- evilwm is based on aewm by Decklin Foster.  It further maximises screen
- real-estate and provides a good set of keyboard controls.
+ evilwm is based on aewm by Decklin Foster. It's minimalist 
+ in that it omits unnecessary stuff like window decorations 
+ and icons. But it's very usable in that it provides good 
+ keyboard control with repositioning and maximize toggles, 
+ solid window drags, snap-to-border support, and virtual desktops.

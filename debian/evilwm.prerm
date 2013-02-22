@@ -1,14 +1,14 @@
 #!/bin/sh
 set -e
 
-Tinywm_entry="/usr/bin/evilwm"
+WMentry="/usr/bin/evilwm"
 PACKAGE="evilwm"
 
 case "$1" in
     remove)
         #rm -rf /etc/X11/$PACKAGE
         update-alternatives --remove x-window-manager \
-       	$Tinywm_entry 
+       	$WMentry 
 	;;
     *)
         ;;
