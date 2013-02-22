@@ -13,7 +13,7 @@ Package: evilwm
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Provides: x-window-manager
-Description: a minimalist window manager for X11
+Description: minimalist window manager for X11
  evilwm is based on aewm by Decklin Foster. It's minimalist 
  in that it omits unnecessary stuff like window decorations 
  and icons. But it's very usable in that it provides good 
