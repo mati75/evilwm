@@ -1,3 +1,16 @@
+evilwm (1.1.0-2) unstable; urgency=low
+
+  * Add show-in-login-manager.patch:
+    + fix switching to another wm isn't documented. (Closes: #596427)
+    + fix show up in display manager. (Closes: #703986)
+  * Packages is provide x-window-manager now. (Closes: #663992)
+  * Add fix-lost-focus.patch.
+  * Add CFLAGS.
+  * Add simple configuration file installed in /etc/xdg/.evilwmrc_simple:
+    + debian/control: add xterm and xfonts-terminus to suggests.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Tue, 26 Mar 2013 20:00:26 +0100
+
 evilwm (1.1.0-1) unstable; urgency=low
 
   * New maintainer.

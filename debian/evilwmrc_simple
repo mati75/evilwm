@@ -1,0 +1,12 @@
+#Simple configuration for EvilWM
+term xterm
+snap 10
+bw 2
+fg #cccccc
+fc #6699cc
+mask1 mod4
+altmask shift
+bg #999999
+fn terminus:pixelsize=8
+
+

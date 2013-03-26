@@ -13,6 +13,7 @@ Package: evilwm
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Provides: x-window-manager
+Suggests: xfonts-75dpi, xfonts-100dpi, xterm, xfonts-terminus
 Description: minimalist window manager for X11
  evilwm is based on aewm by Decklin Foster. It's minimalist 
  in that it omits unnecessary stuff like window decorations 

@@ -1,7 +1,16 @@
 #!/usr/bin/make -f
+LDFLAGS=$(shell dpkg-buildflags --get LDFLAGS)
+LDFLAGS+=-Wl,-z,defs -Wl,--as-needed
 
+export LDFLAGS
 # Default to normal "small" binary
 CFLAGS = -Os
 
 %:
 	dh $@ --parallel
+
+override_dh_install:
+	mkdir debian/evilwm/etc/
+	mkdir debian/evilwm/etc/xdg
+	install -m 644  debian/evilwmrc_simple \
+	$(CURDIR)/debian/evilwm/etc/xdg/.evilwmrc_simpl
