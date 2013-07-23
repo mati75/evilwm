@@ -1,3 +1,10 @@
+evilwm (1.1.0-3) UNRELEASED; urgency=low
+
+  * Update debian/docs:
+    + add doc/standards.html to install with package. (Closes: #717599)
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Tue, 23 Jul 2013 14:48:29 +0200
+
 evilwm (1.1.0-2) unstable; urgency=low
 
   * Add show-in-login-manager.patch:
