@@ -13,4 +13,4 @@ override_dh_install:
 	mkdir debian/evilwm/etc/
 	mkdir debian/evilwm/etc/xdg
 	install -m 644  debian/evilwmrc_simple \
-	$(CURDIR)/debian/evilwm/etc/xdg/.evilwmrc_simpl
+	$(CURDIR)/debian/evilwm/etc/xdg/.evilwmrc_simple
