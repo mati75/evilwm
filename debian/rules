@@ -6,6 +6,9 @@ export LDFLAGS
 # Default to normal "small" binary
 CFLAGS = -Os
 
+# evilwm does not build (yet) with hardening
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
 %:
 	dh $@ --parallel
 
