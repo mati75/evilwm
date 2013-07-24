@@ -1,9 +1,11 @@
-evilwm (1.1.0-3) UNRELEASED; urgency=low
+evilwm (1.1.0-3) unstable; urgency=low
 
   * Update debian/docs:
     + add doc/standards.html to install with package. (Closes: #717599)
+  * debian/rules:
+    + fix typo with copy simple configuration.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Tue, 23 Jul 2013 14:48:29 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 24 Jul 2013 11:27:37 +0200
 
 evilwm (1.1.0-2) unstable; urgency=low
 
