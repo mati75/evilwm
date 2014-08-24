@@ -3,8 +3,9 @@ evilwm (1.1.0-4) UNRELEASED; urgency=low
   * Patch working:
     + add use_fixed_font.patch to use fixed fonts,
     + 
+  * Bump standards version to 3.9.5. (no changes needed)
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Mon, 07 Oct 2013 09:12:23 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 24 Aug 2014 15:50:19 +0200
 
 evilwm (1.1.0-3) unstable; urgency=low
 
