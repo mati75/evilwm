@@ -6,6 +6,7 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/select.h>
+#include <X11/XKBlib.h>
 #include "evilwm.h"
 #include "log.h"
 
@@ -23,7 +24,7 @@ const char *debug_atom_name(Atom a) {
 #endif
 
 static void handle_key_event(XKeyEvent *e) {
-	KeySym key = XKeycodeToKeysym(dpy,e->keycode,0);
+	KeySym key = XkbKeycodeToKeysym(dpy, e->keycode, 0, 0);
 	Client *c;
 	int width_inc, height_inc;
 	ScreenInfo *current_screen = find_current_screen();
@@ -38,9 +39,9 @@ static void handle_key_event(XKeyEvent *e) {
 				XEvent ev;
 				do {
 					XMaskEvent(dpy, KeyPressMask|KeyReleaseMask, &ev);
-					if (ev.type == KeyPress && XKeycodeToKeysym(dpy,ev.xkey.keycode,0) == KEY_NEXT)
+					if (ev.type == KeyPress && XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, 0) == KEY_NEXT)
 						next();
-				} while (ev.type == KeyPress || XKeycodeToKeysym(dpy,ev.xkey.keycode,0) == KEY_NEXT);
+				} while (ev.type == KeyPress || XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, 0) == KEY_NEXT);
 				XUngrabKeyboard(dpy, CurrentTime);
 			}
 			ewmh_select_client(current);
@@ -169,7 +170,6 @@ move_client:
 	return;
 }
 
-#ifdef MOUSE
 static void handle_button_event(XButtonEvent *e) {
 	Client *c = find_client(e->window);
 
@@ -185,7 +185,6 @@ static void handle_button_event(XButtonEvent *e) {
 		}
 	}
 }
-#endif
 
 static void do_window_changes(int value_mask, XWindowChanges *wc, Client *c,
 		int gravity) {
@@ -512,10 +511,8 @@ void event_main_loop(void) {
 			switch (ev.xevent.type) {
 			case KeyPress:
 				handle_key_event(&ev.xevent.xkey); break;
-#ifdef MOUSE
 			case ButtonPress:
 				handle_button_event(&ev.xevent.xbutton); break;
-#endif
 			case ConfigureRequest:
 				handle_configure_request(&ev.xevent.xconfigurerequest); break;
 			case MapRequest:

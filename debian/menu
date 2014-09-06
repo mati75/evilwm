@@ -1,2 +1,0 @@
-?package(evilwm):needs="wm" section="Window Managers"\
-  title="evilwm" command="/usr/bin/evilwm"
