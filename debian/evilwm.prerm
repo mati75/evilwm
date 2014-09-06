@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+WMentry="/usr/bin/evilwm"
+PACKAGE="evilwm"
+
+case "$1" in
+    remove)
+        #rm -rf /etc/X11/$PACKAGE
+        update-alternatives --remove x-window-manager \
+       	$WMentry 
+	;;
+    *)
+        ;;
+esac
+
+#DEBHELPER#

@@ -1,0 +1,19 @@
+#!/usr/bin/make -f
+DEB_BUILD_MAINT_OPTIONS = hardening=+all
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
+
+# Default to normal "small" binary
+CFLAGS += -Os
+
+%:
+	dh $@ --parallel
+
+override_dh_install:
+	mkdir debian/evilwm/etc/
+	mkdir debian/evilwm/etc/xdg
+	install -m 644  debian/evilwmrc_simple \
+	$(CURDIR)/debian/evilwm/etc/xdg/.evilwmrc_simple
+
+override_dh_builddeb:
+	dh_builddeb -- -Zxz -z9

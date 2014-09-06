@@ -1,0 +1,14 @@
+Description: Disable CFLAGS for hardening all
+Author: Mateusz Łukasik <mati75@linuxmint.pl>, Markus <waldeck@gmx.de>
+
+--- a/Makefile
++++ b/Makefile
+@@ -74,7 +74,7 @@ OPT_CPPFLAGS += -DVWM
+ CC = gcc
+ 
+ # Override if desired:
+-CFLAGS = -Os
++#CFLAGS = -Os
+ WARN = -Wall -W -Wstrict-prototypes -Wpointer-arith -Wcast-align \
+ 	-Wshadow -Waggregate-return -Wnested-externs -Winline -Wwrite-strings \
+ 	-Wundef -Wsign-compare -Wmissing-prototypes -Wredundant-decls
