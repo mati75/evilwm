@@ -23,9 +23,6 @@ OPT_CPPFLAGS += -DINFOBANNER
 # Uncomment to show the same banner on moves and resizes.  Can be SLOW!
 #OPT_CPPFLAGS += -DINFOBANNER_MOVERESIZE
 
-# Uncomment for mouse support.  Recommended.
-OPT_CPPFLAGS += -DMOUSE
-
 # Uncomment to support the Xrandr extension (thanks, Yura Semashko).
 OPT_CPPFLAGS += -DRANDR
 OPT_LDLIBS   += -lXrandr
@@ -44,7 +41,7 @@ OPT_CPPFLAGS += -DSTDIO
 OPT_CPPFLAGS += -DVWM
 
 # Uncomment to move pointer around on certain actions.
-OPT_CPPFLAGS += -DWARP_POINTER
+#OPT_CPPFLAGS += -DWARP_POINTER
 
 # Uncomment to use Ctrl+Alt+q instead of Ctrl+Alt+Escape.  Useful for Cygwin.
 #OPT_CPPFLAGS += -DKEY_KILL=XK_q
@@ -77,7 +74,7 @@ OPT_CPPFLAGS += -DWARP_POINTER
 CC = gcc
 
 # Override if desired:
-CFLAGS = -Os -std=c99
+CFLAGS = -Os
 WARN = -Wall -W -Wstrict-prototypes -Wpointer-arith -Wcast-align \
 	-Wshadow -Waggregate-return -Wnested-externs -Winline -Wwrite-strings \
 	-Wundef -Wsign-compare -Wmissing-prototypes -Wredundant-decls
@@ -100,7 +97,7 @@ INSTALL_PROGRAM = $(INSTALL) -m 0755 $(INSTALL_STRIP)
 ############################################################################
 # You shouldn't need to change anything beyond this point
 
-version = 1.1.0
+version = 1.1.1
 distname = evilwm-$(version)
 
 # Generally shouldn't be overridden:
@@ -108,9 +105,9 @@ distname = evilwm-$(version)
 #  _POSIX_C_SOURCE=200112L for sigaction
 EVILWM_CPPFLAGS = $(CPPFLAGS) $(OPT_CPPFLAGS) -DVERSION=\"$(version)\" \
 	-D_SVID_SOURCE=1 \
-	-D_POSIX_C_SOURCE=200112L \
-	$(NULL)
+	-D_POSIX_C_SOURCE=200112L
 EVILWM_CFLAGS = -std=c99 $(CFLAGS) $(WARN)
+EVILWM_LDFLAGS = $(LDFLAGS)
 EVILWM_LDLIBS = -lX11 $(OPT_LDLIBS) $(LDLIBS)
 
 HEADERS = evilwm.h keymap.h list.h log.h xconfig.h
@@ -125,7 +122,7 @@ $(OBJS): $(HEADERS)
 	$(CC) $(EVILWM_CFLAGS) $(EVILWM_CPPFLAGS) -c $<
 
 evilwm$(EXEEXT): $(OBJS)
-	$(CC) -o $@ $(OBJS) $(LDFLAGS) $(EVILWM_LDLIBS)
+	$(CC) -o $@ $(OBJS) $(EVILWM_LDFLAGS) $(EVILWM_LDLIBS)
 
 .PHONY: install
 install: evilwm$(EXEEXT)
