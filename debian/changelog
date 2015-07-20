@@ -1,5 +1,6 @@
-evilwm (1.1.1~git20140130-2) UNRELEASED; urgency=medium
+evilwm (1.1.1-1) UNRELEASED; urgency=medium
 
+  * New upstream release. (Closes: #725494)
   * Bump standards version to 3.9.6 (no changes needed).
   * debian/rules: Drop obsolete override_dh_builddeb.
   * Remove debian/source/options -- no longer needed.
