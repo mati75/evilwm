@@ -8,7 +8,7 @@ evilwm (1.1.1-1) UNRELEASED; urgency=medium
     + Drop obsolete override_dh_builddeb.
     + Drop override_dh_install.
   * Remove debian/source/options -- no longer needed.
-  * Add debian/evilwm.dirs to make etc/xdg dir.
+  * Add debian/evilwm.dirs to prepare etc/xdg dir.
   * Add debian/evilwm.install to install simple configuration from
     debian/.evilwmrc_simple.
   * Patch working:
@@ -18,6 +18,8 @@ evilwm (1.1.1-1) UNRELEASED; urgency=medium
     possible-documentation-but-no-doc-base-registration.
   * debian/source/lintian-overrides:
     + Add debian-watch-may-check-gpg-signature.
+  * debian/copyright:
+    + Update years.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 05 Apr 2015 00:00:44 +0200
 
