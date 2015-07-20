@@ -2,8 +2,13 @@ evilwm (1.1.1-1) UNRELEASED; urgency=medium
 
   * New upstream release. (Closes: #725494)
   * Bump standards version to 3.9.6 (no changes needed).
-  * debian/rules: Drop obsolete override_dh_builddeb.
+  * Clean debian/rules:
+    + Drop obsolete override_dh_builddeb.
+    + Drop override_dh_install.
   * Remove debian/source/options -- no longer needed.
+  * Add debian/evilwm.dirs to make etc/xdg dir.
+  * Add debian/evilwm.install to install simple configuration from
+    debian/.evilwmrc_simple.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 05 Apr 2015 00:00:44 +0200
 
