@@ -27,29 +27,29 @@ evilwm (1.1.1~git20140130-1) unstable; urgency=low
 
   * Merge lastest upstream snapshot.
   * Patch working:
-    + add use_fixed_font.patch to use fixed fonts.
-    + add enable-hardening.patch to use hardening flags.
+    + Add use_fixed_font.patch to use fixed fonts.
+    + Add enable-hardening.patch to use hardening flags.
       Thanks to Markus Waldeck <waldeck@gmx.de>.
   * Bump standards version to 3.9.5 (no changes needed).
   * debian/copyright:
-    + update years.
+    + Update years.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 05 Sep 2014 21:51:09 +0200
 
 evilwm (1.1.0-3) unstable; urgency=low
 
   * Update debian/docs:
-    + add doc/standards.html to install with package (Closes: #717599).
+    + Add doc/standards.html to install with package (Closes: #717599).
   * debian/rules:
-    + fix typo with copy simple configuration.
+    + Fix typo with copy simple configuration.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 24 Jul 2013 11:27:37 +0200
 
 evilwm (1.1.0-2) unstable; urgency=low
 
   * Add show-in-login-manager.patch:
-    + fix switching to another wm isn't documented (Closes: #596427).
-    + fix show up in display manager (Closes: #703986).
+    + Fix switching to another wm isn't documented (Closes: #596427).
+    + Fix show up in display manager (Closes: #703986).
   * Packages is provide x-window-manager now (Closes: #663992).
   * Add fix-lost-focus.patch.
   * Add CFLAGS.
@@ -62,13 +62,13 @@ evilwm (1.1.0-1) unstable; urgency=low
 
   * New maintainer.
   * New upstream release (Closes: #542343).
-    + fixes hangs with 100% CPU if no .xinitrc provided (Closes: #554846).
-    + fixes hangs instead of shutting down when killed (Closes: #512548).
+    + Fixes hangs with 100% CPU if no .xinitrc provided (Closes: #554846).
+    + Fixes hangs instead of shutting down when killed (Closes: #512548).
   * Update debian/control:
-    + change maintainer.
-    + bump standard options to 3.9.4.
-    + add xfonts-75dpi, xfonts-100dpi to package depends (LP: #217502).
-    + add Vcs links.
+    + Change maintainer.
+    + Bump standard options to 3.9.4.
+    + Add xfonts-75dpi, xfonts-100dpi to package depends (LP: #217502).
+    + Add Vcs links.
   * Add xorg to suggest depends.
   * Change format to 3.0 (quilt).
     + Add source/format file.
