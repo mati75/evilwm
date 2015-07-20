@@ -1,5 +1,5 @@
 /* evilwm - Minimalist Window Manager for X
- * Copyright (C) 1999-2011 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2015 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 #include <stdint.h>
@@ -161,12 +161,14 @@ void make_new_client(Window w, ScreenInfo *s) {
 	{
 		client_show(c);
 		client_raise(c);
-		select_client(c);
+		if (!(window_type & (EWMH_WINDOW_TYPE_DOCK|EWMH_WINDOW_TYPE_NOTIFICATION))) {
+			select_client(c);
 #ifdef WARP_POINTER
-		setmouse(c->window, c->width + c->border - 1,
-				c->height + c->border - 1);
+			setmouse(c->window, c->width + c->border - 1,
+				 c->height + c->border - 1);
 #endif
-		discard_enter_events(c);
+			discard_enter_events(c);
+		}
 	}
 #ifdef VWM
 	else {
