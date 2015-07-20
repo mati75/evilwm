@@ -16,6 +16,8 @@ evilwm (1.1.1-1) UNRELEASED; urgency=medium
     + Refresh show-in-login-manager.patch.
   * Add debian/evilwm.doc-base to fix lintian warning
     possible-documentation-but-no-doc-base-registration.
+  * debian/source/lintian-overrides:
+    + Add debian-watch-may-check-gpg-signature.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 05 Apr 2015 00:00:44 +0200
 
