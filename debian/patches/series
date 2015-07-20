@@ -1,3 +1,4 @@
 fix-lost-focus.patch
+remove-encoding.patch
 show-in-login-manager.patch
 enable_hardening.patch

@@ -3,7 +3,7 @@ Section: x11
 Priority: optional
 Maintainer: Mateusz Łukasik <mati75@linuxmint.pl>
 Build-Depends: debhelper (>= 9), x11proto-core-dev, libx11-dev, 
-  x11proto-xext-dev, libxrandr-dev
+  x11proto-xext-dev, libxrandr-dev, doc-base
 Standards-Version: 3.9.6
 Homepage: http://www.6809.org.uk/evilwm/
 Vcs-Git: git://github.com/mati75/evilwm.git

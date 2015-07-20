@@ -1,0 +1,12 @@
+Description: Remove encoding from desktop file.
+Author: Mateusz Łukasik <mati75@linuxmint.pl>
+
+--- a/evilwm.desktop
++++ b/evilwm.desktop
+@@ -1,6 +1,5 @@
+ [Desktop Entry]
+ Type=Application
+-Encoding=UTF-8
+ Name=evilwm
+ Exec=evilwm
+ NoDisplay=true

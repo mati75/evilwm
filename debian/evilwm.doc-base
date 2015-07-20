@@ -1,0 +1,15 @@
+Document: evilwm
+Title: minimalist window manager for X11
+Author: Ciaran Anscomb <evilwm@6809.org.uk>
+Abstract: evilwm - minimalist window manager for X11
+ evilwm is based on aewm by Decklin Foster. It's minimalist 
+ in that it omits unnecessary stuff like window decorations 
+ and icons. But it's very usable in that it provides good 
+ keyboard control with repositioning and maximize toggles, 
+ solid window drags, snap-to-border support, and virtual desktops.
+Section: Window Managers
+
+Format: HTML
+Index: /usr/share/doc/evilwm/standards.html
+Files: /usr/share/doc/evilwm/standards.html
+

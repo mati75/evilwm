@@ -1,7 +1,9 @@
 evilwm (1.1.1-1) UNRELEASED; urgency=medium
 
   * New upstream release. (Closes: #725494)
-  * Bump standards version to 3.9.6 (no changes needed).
+  * debian/control:
+    + Bump standards version to 3.9.6 (no changes needed).
+    + Add doc-base to B-D.
   * Clean debian/rules:
     + Drop obsolete override_dh_builddeb.
     + Drop override_dh_install.
@@ -9,6 +11,11 @@ evilwm (1.1.1-1) UNRELEASED; urgency=medium
   * Add debian/evilwm.dirs to make etc/xdg dir.
   * Add debian/evilwm.install to install simple configuration from
     debian/.evilwmrc_simple.
+  * Patch working:
+    + Add remove-encoding.patch to remove Encoding from desktop file.
+    + Refresh show-in-login-manager.patch.
+  * Add debian/evilwm.doc-base to fix lintian warning
+    possible-documentation-but-no-doc-base-registration.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 05 Apr 2015 00:00:44 +0200
 
