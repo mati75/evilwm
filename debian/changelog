@@ -1,4 +1,4 @@
-evilwm (1.1.1-1) UNRELEASED; urgency=medium
+evilwm (1.1.1-1) unstable; urgency=medium
 
   * New upstream release. (Closes: #725494)
   * debian/control:
@@ -21,7 +21,7 @@ evilwm (1.1.1-1) UNRELEASED; urgency=medium
   * debian/copyright:
     + Update years.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 05 Apr 2015 00:00:44 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Mon, 20 Jul 2015 23:02:33 +0200
 
 evilwm (1.1.1~git20140130-1) unstable; urgency=low
 
