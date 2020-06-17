@@ -7,4 +7,4 @@ include /usr/share/dpkg/buildflags.mk
 CFLAGS += -Os
 
 %:
-	dh $@ --parallel
+	dh $@

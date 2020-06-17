@@ -2,10 +2,10 @@ Source: evilwm
 Section: x11
 Priority: optional
 Maintainer: Mateusz Łukasik <mati75@linuxmint.pl>
-Build-Depends: debhelper (>= 9), x11proto-core-dev, libx11-dev, 
-  x11proto-xext-dev, libxrandr-dev, doc-base
+Build-Depends: x11proto-core-dev, libx11-dev,
+  x11proto-xext-dev, libxrandr-dev, doc-base, debhelper-compat (= 12)
 Standards-Version: 3.9.6
-Homepage: http://www.6809.org.uk/evilwm/
+Homepage: https://www.6809.org.uk/evilwm/
 Vcs-Git: https://github.com/mati75/evilwm.git
 Vcs-Browser: https://github.com/mati75/evilwm.git
 
@@ -15,8 +15,8 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Provides: x-window-manager
 Suggests: xfonts-75dpi, xfonts-100dpi, xterm, xfonts-terminus
 Description: minimalist window manager for X11
- evilwm is based on aewm by Decklin Foster. It's minimalist 
- in that it omits unnecessary stuff like window decorations 
- and icons. But it's very usable in that it provides good 
- keyboard control with repositioning and maximize toggles, 
+ evilwm is based on aewm by Decklin Foster. It's minimalist
+ in that it omits unnecessary stuff like window decorations
+ and icons. But it's very usable in that it provides good
+ keyboard control with repositioning and maximize toggles,
  solid window drags, snap-to-border support, and virtual desktops.
