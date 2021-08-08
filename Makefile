@@ -1,3 +1,8 @@
+############################################################################
+# evilwm - minimalist window manager for X11
+# Copyright (C) 1999-2021 Ciaran Anscomb <evilwm@6809.org.uk>
+# see README for license and other details.
+
 # do not include any other makefiles above this line.
 THISMAKEFILE=$(lastword $(MAKEFILE_LIST))
 # allow trivial out-of-tree builds
@@ -17,6 +22,10 @@ desktopfilesdir = $(datarootdir)/applications
 ############################################################################
 # Features
 
+# Uncomment to enable use of sqrt() function in monitor distance calculations.
+OPT_CPPFLAGS += -DHAVE_MATH_H
+OPT_LDLIBS += -lm
+
 # Uncomment to enable info banner on holding Ctrl+Alt+I.
 OPT_CPPFLAGS += -DINFOBANNER
 
@@ -34,12 +43,6 @@ OPT_LDLIBS   += -lXext
 # Uncomment to enable solid window drags.  This can be slow on old systems.
 OPT_CPPFLAGS += -DSOLIDDRAG
 
-# Uncomment to compile in certain text messages like help.  Recommended.
-OPT_CPPFLAGS += -DSTDIO
-
-# Uncomment to support virtual desktops.
-OPT_CPPFLAGS += -DVWM
-
 # Uncomment to move pointer around on certain actions.
 #OPT_CPPFLAGS += -DWARP_POINTER
 
@@ -50,6 +53,11 @@ OPT_CPPFLAGS += -DVWM
 #OPT_CPPFLAGS += -DDEBUG   # miscellaneous debugging
 #OPT_CPPFLAGS += -DXDEBUG  # show some X calls
 
+OPT_CPPFLAGS += -DNDEBUG  # disable asserts
+
+# Uncomment to map KEY_TOPLEFT to XK_z (suitable for quertz keyboards)
+#OPT_CPPFLAGS += -DQWERTZ_KEYMAP
+
 ############################################################################
 # Include file and library paths
 
@@ -58,14 +66,18 @@ OPT_CPPFLAGS += -DVWM
 
 # Solaris 10:
 #OPT_CPPFLAGS += -I/usr/X11/include
-#LDFLAGS  += -R/usr/X11/lib -L/usr/X11/lib
+#OPT_LDFLAGS += -R/usr/X11/lib -L/usr/X11/lib
 
 # Solaris <= 9 doesn't support RANDR feature above, so disable it there
 # Solaris 9 doesn't fully implement ISO C99 libc, to suppress warnings, use:
 #OPT_CPPFLAGS += -D__EXTENSIONS__
 
+# OpenBSD 6.2
+#OPT_CPPFLAGS += -I/usr/X11R6/include
+#OPT_LDFLAGS += -L/usr/X11R6/lib
+
 # Mac OS X:
-#LDFLAGS += -L/usr/X11R6/lib
+#OPT_LDFLAGS += -L/usr/X11R6/lib
 
 ############################################################################
 # Build tools
@@ -87,31 +99,34 @@ WARN = -Wall -W -Wstrict-prototypes -Wpointer-arith -Wcast-align \
 # For Cygwin:
 #EXEEXT = .exe
 
-# Override INSTALL_STRIP if you don't want a stripped binary
 INSTALL = install
-INSTALL_STRIP = -s
+STRIP = strip
 INSTALL_DIR = $(INSTALL) -d -m 0755
 INSTALL_FILE = $(INSTALL) -m 0644
-INSTALL_PROGRAM = $(INSTALL) -m 0755 $(INSTALL_STRIP)
+INSTALL_PROGRAM = $(INSTALL) -m 0755
+
+# If you do not use GNU Make, you may need to comment out this line (and the
+# output from 'configure' will not be used):
+-include config.mk
 
 ############################################################################
 # You shouldn't need to change anything beyond this point
 
-version = 1.1.1
-distname = evilwm-$(version)
+version = 1.3.1
+distdir = evilwm-$(version)
 
 # Generally shouldn't be overridden:
-#  _SVID_SOURCE for strdup and putenv
-#  _POSIX_C_SOURCE=200112L for sigaction
+#  _XOPEN_SOURCE=700 incorporates POSIX.1-2008, for putenv, sigaction and strdup
 EVILWM_CPPFLAGS = $(CPPFLAGS) $(OPT_CPPFLAGS) -DVERSION=\"$(version)\" \
-	-D_SVID_SOURCE=1 \
-	-D_POSIX_C_SOURCE=200112L
+	-D_XOPEN_SOURCE=700 -DHAVE_CONFIG_H
 EVILWM_CFLAGS = -std=c99 $(CFLAGS) $(WARN)
 EVILWM_LDFLAGS = $(LDFLAGS)
 EVILWM_LDLIBS = -lX11 $(OPT_LDLIBS) $(LDLIBS)
 
-HEADERS = evilwm.h keymap.h list.h log.h xconfig.h
-OBJS = client.o events.o ewmh.o list.o main.o misc.o new.o screen.o xconfig.o
+HEADERS = client.h config.h display.h events.h evilwm.h keymap.h list.h \
+	log.h screen.h util.h xalloc.h xconfig.h
+OBJS = client.o client_move.o client_new.o display.o events.o ewmh.o \
+	list.o log.o main.o screen.o util.o xconfig.o xmalloc.o
 
 .PHONY: all
 all: evilwm$(EXEEXT)
@@ -133,6 +148,10 @@ install: evilwm$(EXEEXT)
 	$(INSTALL_DIR) $(DESTDIR)$(desktopfilesdir)
 	$(INSTALL_FILE) $(src_dir)/evilwm.desktop $(DESTDIR)$(desktopfilesdir)/
 
+.PHONY: install-strip
+install-strip: install
+	$(STRIP) $(DESTDIR)$(bindir)/evilwm$(EXEEXT)
+
 .PHONY: uninstall
 uninstall:
 	rm -f $(DESTDIR)$(bindir)/evilwm$(EXEEXT)
@@ -141,17 +160,21 @@ uninstall:
 
 .PHONY: dist
 dist:
-	git archive --format=tar --prefix=$(distname)/ HEAD > ../$(distname).tar
-	gzip -f9 ../$(distname).tar
+	git archive --format=tar --prefix=$(distdir)/ HEAD > $(distdir).tar
+	gzip -f9 $(distdir).tar
 
 .PHONY: debuild
 debuild: dist
-	-cd ..; rm -rf $(distname)/ $(distname).orig/
-	cd ..; mv $(distname).tar.gz evilwm_$(version).orig.tar.gz
+	-cd ..; rm -rf $(distdir)/ $(distdir).orig/
+	mv $(distdir).tar.gz ../evilwm_$(version).orig.tar.gz
 	cd ..; tar xfz evilwm_$(version).orig.tar.gz
-	rsync -axH debian --exclude='debian/.git/' --exclude='debian/_darcs/' ../$(distname)/
-	cd ../$(distname); debuild
+	rsync -axH debian --exclude='debian/.git/' --exclude='debian/_darcs/' ../$(distdir)/
+	cd ../$(distdir); debuild
 
 .PHONY: clean
 clean:
 	rm -f evilwm$(EXEEXT) $(OBJS)
+
+.PHONY: distclean
+distclean: clean
+	rm -f config.mk

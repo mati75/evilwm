@@ -1,139 +1,212 @@
-evilwm 1.1 by Ciaran Anscomb <evilwm@6809.org.uk>
-
-evilwm is a minimalist window manager for the X Window System.
-
-The name evil came from Stuart 'Stuii' Ford, who thinks that any software
-I use must be evil and masochistic.  In reality, this window manager is
-clean and easy to use.
+evilwm(1)                   General Commands Manual                  evilwm(1)
 
 
-FEATURES
 
- * No window decorations apart from a simple 1 pixel border.
- * No icons.
- * Good keyboard control, including repositioning and maximise toggles.
- * Solid window drags (optional - may be slow on old machines).
- * Virtual desktops.
- * Small binary size (even with everything turned on).
- * Reasonable EWMH support (though not yet fully compliant).
- * Configuration file read on startup.
+NAME
+       evilwm--minimalist window manager for X11
 
+SYNOPSIS
+       evilwm [OPTION]...
 
-INSTALLATION
+DESCRIPTION
+       evilwm  is  a  minimalist  window  manager  for the X Window System. It
+       features plenty of mouse and keyboard controls while providing a  clean
+       display, uncluttered by less useful window furniture (like title bars).
 
-Please see the file INSTALL for details on building evilwm.
+OPTIONS
+       -display display
+              specifies  the X display to run on. Usually this can be inferred
+              from the DISPLAY environment variable.
 
+       -term termprog
+              specifies an alternative program to  run  when  spawning  a  new
+              terminal  (defaults to xterm, or x-terminal-emulator in Debian).
+              Separate arguments with whitespace, and escape needed whitespace
+              with  a  backslash.  Remember  that special characters will also
+              need to be protected from the shell.
 
-STARTING EVILWM
+       -fn fontname
+              specify a font to use when resizing or displaying window titles.
 
-If you're using a standard X desktop, you can start evilwm by just
-changing your ~/.xinitrc file.  Here's a pretty standard sample file:
+       -fg colour, -fc colour, -bg colour
+              frame colour of currently active,  fixed  active,  and  inactive
+              windows  respectively.  Either  specify  an X11 colour name like
+              goldenrod, or a hex triplet like #DAA520.
 
------CUT HERE-----
-[ -f $HOME/.Xdefaults ] && xrdb $HOME/.Xdefaults
-xsetroot -solid \#400040 -cursor_name top_left_arrow
-/usr/bin/evilwm -snap 10 &
-exec xclock -digital -padding 2 -g -0+0
------CUT HERE-----
+       -bw borderwidth
+              width of window borders in pixels.
 
-Note that in this case 'xclock' is the magic process (the one that if
-you kill it, your session dies).  You could change it around and have
-evilwm be your magic process if you prefer.  Also note that it sets the
-cursor shape and background colour with standard X tools (evilwm won't
-do this for you - the tools already exist!).
+       -snap distance
+              enable snap-to-border support.  distance  is  the  proximity  in
+              pixels to snap to.
 
-If you use the GNOME session manager, you can configure it to
-use evilwm as its window manager.  Run gconf-editor and set the
-key /desktop/gnome/session/required_components/windowmanager
-to "evilwm".
+       -wholescreen
+              ignore  monitor  geometry  and  use the whole screen dimensions.
+              This is the old behaviour from before multi-monitor support  was
+              implemented,  and  may  still  be  useful,  e.g., when one large
+              monitor is driven from multiple outputs.
 
+       -numvdesks value
+              number of virtual desktops to provide. Defaults to 8. Any extras
+              will     only    be    accessible    by    pagers    or    using
+              Control+Alt+(Left/Right).
 
-CONTROLS
+       -nosoliddrag
+              draw a window outline while moving or resizing.
 
-You can use the mouse to manipulate windows either by click/dragging
-the 1 pixel border, or by holding down Alt and doing so anywhere in the
-client window.  The controls are:
+       -mask1 modifiers, -mask2 modifiers, -altmask modifiers
+              override the default keyboard modifiers used to  grab  keys  for
+              window manager functionality.
 
-Button 1       Move window.
-Button 2       Resize window.
-Button 3       Lower window.
+              mask1 is used for most keyboard controls (default: control+alt),
+              and mask2 is used for mouse button controls and cycling  windows
+              (default:  alt).  altmask  is  used  to  modify the behaviour of
+              certain controls (default: shift). Modifiers  may  be  separated
+              with  +  signs.  Valid  modifiers are shift, lock, control, alt,
+              mod1, mod2, mod3, mod4, mod5.
 
-Most keyboard controls are used by holding down Control and Alt, then
-pressing a key.  Available functions are:
+       -app name/class
+              match an application by instance name and  class  (for  help  in
+              finding  these,  use  the  xprop  tool  to  extract the WM_CLASS
+              property).
 
-Return         Spawn new xterm.
-Escape         Delete current window.
-Insert         Lower current window.
-H, J, K, L     Move window left, down, up or right (16 pixels).
-               Holding Shift resizes the window instead.
-Y, U, B, N     Move window to top-left, top-right, bottom-left or
-               bottom-right of screen.
-I              Show information about current window.
-Equals         Maximise current window vertically (toggle).
-X              Maximise current window (toggle).
-D              Toggle visible state of docks (e.g., pagers and launch bars).
+              Subsequent -geometry, -dock,  -vdesk  and  -fixed  options  will
+              apply to this match.
 
-If compiled with virtual desktop support, these functions are also
-available:
+       -g, -geometry geometry
+              apply  a  geometry  (using  a  standard  X  geometry  string) to
+              applications matching the last -app.
 
-F              Fix or unfix window.
-1 - 8          Switch virtual desktop.
-Left           Previous virtual desktop.
-Right          Next virtual desktop.
-A              Switch to the most recently unmapped virtual desktop.
+       -dock  specify that application should be considered to be a dock, even
+              if it lacks the appropriate property.
 
-In addition to the above, Alt+Tab can be used to cycle through windows
-on screen.
+       -v, -vdesk vdesk
+              specify  a default virtual desktop for applications matching the
+              last -app. Note that virtual desktops are numbered from zero.
 
+       -f, -fixed
+              specify that application is to start with a fixed client window.
 
-ACKNOWLEDGEMENTS
+       -help  show help
 
-The original code base for this project was that of aewm by Decklin
-Foster.  His code is very clean and, in later versions, very well
-commented.  I'd recommend it if you want to learn more about window
-manager theory (or indeed want title bars, etc ;).
+       -V     show program version
 
-http://www.red-bean.com/~decklin/aewm/
-               - aewm homepage
+       evilwm will also read  options,  one  per  line,  from  a  file  called
+       .evilwmrc   in   the   user's  home  directory.  Options  listed  in  a
+       configuration file should omit the leading dash. Options  specified  on
+       the command line override those found in the configuration file.
 
+USAGE
+       In  evilwm,  the focus follows the mouse pointer, and focus is not lost
+       if you stray onto the root window. The current window border is  shaded
+       gold  (unless it is fixed, in which case blue), with other windows left
+       as a dark grey.
+
+       You can use the mouse to manipulate windows  either  by  click/dragging
+       the single-pixel border (easier when they align with a screen edge), or
+       by holding down Alt and doing so anywhere in the window.  The  controls
+       are:
+
+       Button 1
+              Move window.
+
+       Button 2
+              Resize window.
+
+       Button 3
+              Lower window.
+
+       Most  keyboard  controls are used by holding down Control and Alt, then
+       pressing a key. Available functions are:
+
+       Return Spawn new terminal.
+
+       Escape Delete current window. Hold  Shift  as  well  to  force  kill  a
+              client.
+
+       Insert Lower current window.
+
+       H, J, K, L
+              Move  window  left, down, up or right (16 pixels). Holding Shift
+              resizes the window instead.
+
+       Y, U, B, N
+              Move window to the top-left, top-right, bottom-left  or  bottom-
+              right of the current monitor.
+
+       I      Show information about current window.
+
+       Equals Maximise  current window vertically on current monitor (toggle).
+              Holding Shift toggles horizontal maximization.
+
+       X      Maximise current window to current monitor (toggle).
+
+       D      Toggle visible state of docks (e.g., pagers and launch bars).
+
+       If compiled with virtual desktop  support,  these  functions  are  also
+       available:
+
+       F      Fix  or  unfix current window. Fixed windows remain visible when
+              you switch virtual desktop.
+
+       1--8   Switch to specific virtual  desktop  (internally,  desktops  are
+              numbered  from zero, so this actually switches to desktops 0--7;
+              this only becomes important if you use application matching).
+
+       Left   Switch to next lower numbered virtual desktop.
+
+       Right  Switch to next higher numbered virtual desktop.
+
+       A      Switch to the previously selected virtual desktop.
+
+       In addition to the above, Alt+Tab can be used to cycle through windows.
+
+       To make evilwm exit, kill the process.
+
+FILES
+       $HOME/.evilwmrc
+
+BUGS
+       The author's idea of friendly may differ to that of many other people.
 
 LICENCE
+       Copyright (C) 1999-2021 Ciaran Anscomb <evilwm@6809.org.uk>
 
-evilwm 1.1
-Copyright (C) 1999-2015 Ciaran Anscomb <evilwm@6809.org.uk>
-
-This is free software.  You can do what you want to it, but if it
-breaks something, you get to pay for the counselling.  The code was
-originally based on aewm, so this is distributed under the same terms,
-which follow.
-
+       This is free software. You can do what you want to it, but if it breaks
+       something,  you get to pay for the counselling. The code was originally
+       based on aewm, so this is  distributed  under  the  same  terms,  which
+       follow.
 
 AEWM LICENCE
+       Copyright (c) 1998-2000 Decklin Foster.
 
-Copyright (c) 1998-2000 Decklin Foster.
+       THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS", WITHOUT ANY EXPRESS OR
+       IMPLIED WARRANTIES OF ANY KIND. IN NO EVENT SHALL THE  AUTHOR  BE  HELD
+       LIABLE FOR ANY DAMAGES CONNECTED WITH THE USE OF THIS PROGRAM.
 
-THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS", WITHOUT ANY EXPRESS
-OR IMPLIED WARRANTIES OF ANY KIND. IN NO EVENT SHALL THE AUTHOR BE
-HELD LIABLE FOR ANY DAMAGES CONNECTED WITH THE USE OF THIS PROGRAM.
+       You  are  granted  permission to copy, publish, distribute, and/or sell
+       copies of this program and any  modified  versions  or  derived  works,
+       provided that this copyright and notice are not removed or altered.
 
-You are granted permission to copy, publish, distribute, and/or sell
-copies of this program and any modified versions or derived works,
-provided that this copyright and notice are not removed or altered.
+       Portions of the code were based on 9wm, which contains this license:
 
-Portions of the code were based on 9wm, which contains this license:
+              9wm is free software, and is Copyright (c) 1994 by David Hogan.
+              Permission is granted to all sentient beings to use this
+              software, to make copies of it, and to distribute those copies,
+              provided that:
+                (1) the copyright and licence notices are left intact
+                (2) the recipients are aware that it is free software
+                (3) any unapproved changes in functionality are either
+                      (i) only distributed as patches
+                  or (ii) distributed as a new program which is not called 9wm
+                          and whose documentation gives credit where it is due
+                (4) the author is not held responsible for any defects
+                    or shortcomings in the software, or damages caused by it.
+              There is no warranty for this software.  Have a nice day.
 
-> 9wm is free software, and is Copyright (c) 1994 by David Hogan.
-> Permission is granted to all sentient beings to use this software,
-> to make copies of it, and to distribute those copies, provided
-> that:
->
->     (1) the copyright and licence notices are left intact
->     (2) the recipients are aware that it is free software
->     (3) any unapproved changes in functionality are either
->           (i) only distributed as patches
->       or (ii) distributed as a new program which is not called 9wm
->               and whose documentation gives credit where it is due
->     (4) the author is not held responsible for any defects
->         or shortcomings in the software, or damages caused by it.
->
-> There is no warranty for this software.  Have a nice day.
+SEE ALSO
+       xterm (1), xprop (1)
+
+
+
+evilwm-1.3                         July 2021                         evilwm(1)

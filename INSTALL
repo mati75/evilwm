@@ -1,11 +1,67 @@
-BUILDING EVILWM
+EVILWM INSTALLATION GUIDE
 
-1) Edit Makefile to include the options you need (most people will not need
-   to do this).  Instructions are included by any user-editable option.
 
-2) Run 'make'
 
-3) Run 'make install'
+Building from source
+       See the  evilwm home page (https://www.6809.org.uk/evilwm/)
+        for downloads. Once you have a copy of the source code, either the git
+       repository  or  by  downloading  a  tar  archive,  building   is   very
+       straightforward.
 
-That's it.  The README file has information on starting evilwm.
+       In  addition  to  the  standard  C  compiler  tools,  you will need X11
+       development files installed. Under Debian, the x11proto-dev, libx11-dev
+       and libxrandr-dev packages should suffice.
 
+       The  source  distribution  does contain a configure script, but this is
+       not from the GNU build system. It is a minimal bash script provided  to
+       simplify   multiarch  cross-builds  under  Debian.  Instead,  edit  the
+       Makefile to modify build flags for your platform.
+
+       Then, building and installing is very simple:
+
+              $ make
+              $ make install
+
+       That's it! But if you need to install to a different  prefix,  you  can
+       override with something like:
+
+              $ make install prefix=/usr/local
+
+Starting evilwm
+       The   install   process   puts   a   file  called  evilwm.desktop  into
+       /usr/share/applications, so depending on your desktop manager, you  may
+       simply  be  able  to  pick evilwm from a menu. Otherwise, most managers
+       will run Xsession, which will look for a file in  your  home  directory
+       called  .xsession  and  run  it (so be sure it has execute permission).
+       Here's a simple example .xsession file:
+
+              #!/bin/sh
+              test -f $HOME/.Xresources && xrdb -merge $HOME/.Xresources
+              xsetroot -solid \#400040 -cursor_name left_ptr
+              ( /usr/bin/evilwm -snap 10 >/dev/null 2>&1 & )
+              exec xclock -digital -padding 2 -g -0+0
+
+       The cursor shape and background colour are set with  standard  X  tools
+       (evilwm  won't  do  this  for  you). xclock becomes the "magic process"
+       (session terminates when it is killed). evilwm itself is started  in  a
+       subshell  otherwise  xclock would become its parent, and killing evilwm
+       to restart it may result in a zombie process. You could also avoid this
+       by  not  exec-ing the "magic process"; the shell will handle child sig-
+       nals properly.
+
+       See here for a  more  complete  example  of  a  .xsession  file  (xses-
+       sion.txt).  Obviously, it depends on a lot of external packages.
+
+       You  used  to  be  able  to  configure the GNOME session manager to use
+       evilwm as its window manager by running gconf-editor  and  setting  the
+       key /desktop/gnome/session/required_components/windowmanager to evilwm.
+       The package information for gconf-editor suggests this approach is  out
+       of date, however.
+
+       If  you  typically start X by typing startx from the console, you might
+       need the .xsession file to be called .xinitrc. A  symlink  should  suf-
+       fice.
+
+       After  starting,  you  should  be  able  to bring up an xterm with Con-
+       trol+Alt+Enter. For more information on configuring and  using  evilwm,
+       see the manual (https://www.6809.org.uk/evilwm/manual.shtml).

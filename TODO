@@ -1,11 +1,29 @@
-Desired functionality for 1.1.x:
-   * EWMH support, including:
-        + Client control via root window messages.
-   * A few things can probably cease to be compile-time options.
-   * Better interoperation with Xinerama (David Flynn has some patches
-     for this).
-   * Option for new windows to tile as well as possible.
+# evilwm TODO
 
-Desired functionality for 1.2.x:
 
-   * EWMH compliance.
+## Simpler tasks
+
+Calculate the response to _NET_REQUEST_FRAME_EXTENTS more accurately.
+
+Consider determining initial vdesk from focussed window.
+
+Allow specifying a matrix for vdesk organisation, e.g., "-numvdesks 4x2".  Add
+C+A+Up/Down controls to navigate them.
+
+
+## Intermediate tasks
+
+Investigate SHAPEd windows for client sweep/drag.  As it stands, non-solid
+drags and all sweeps draw a border by inverting pixels on the screen, erasing
+by re-inverting.  This requires the X server to be grabbed, which is
+undesirable.
+
+Although the current methods work well enough, it would be nice to not have to
+grab the X server so often.  e.g., when adding or removing a client, maintain a
+set of windows that the error handler should treat differently.
+
+RandR-based multi-monitor support has now been implemented, but it would be
+nice if, when a client is moved due to removing a monitor, it could be moved
+back to its original position if the _same_ monitor is reattached.  Whether a
+monitor is the "same" is probably just down to whether it occupies the same
+geometry on the screen.
