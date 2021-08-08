@@ -1,4 +1,4 @@
-evilwm (1.1.1-2) UNRELEASED; urgency=medium
+evilwm (1.3.1-1) UNRELEASED; urgency=medium
 
   [ Jelmer Vernooĳ ]
   * Use secure URI in Vcs control header.
@@ -12,7 +12,10 @@ evilwm (1.1.1-2) UNRELEASED; urgency=medium
   * Update renamed lintian tag names in lintian overrides.
   * Drop unnecessary dh arguments: --parallel
 
- -- Jelmer Vernooĳ <jelmer@debian.org>  Fri, 14 Sep 2018 01:15:15 +0100
+  [ Mateusz Łukasik ]
+  * New upstream release. (Closes: #920946)
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 08 Aug 2021 20:12:43 +0200
 
 evilwm (1.1.1-1) unstable; urgency=medium
 
