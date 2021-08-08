@@ -14,6 +14,7 @@ evilwm (1.3.1-1) UNRELEASED; urgency=medium
 
   [ Mateusz Łukasik ]
   * New upstream release. (Closes: #920946)
+  * Bump standards version to 4.5.1
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 08 Aug 2021 20:12:43 +0200
 
