@@ -1,40 +1,161 @@
-.TH evilwm 1 "October 13, 2010" "" ""
-.SH NAME
-evilwm \- Minimalist Window Manager for X
-.SH SYNOPSIS
-\fBevilwm\fP
-[ \fB\-display\fP \fIdisplay\fP ]
-[ \fB\-term\fP \fItermprog\fP ]
-[ \fB\-fn\fP \fIfontname\fP ]
-[ \fB\-fg\fP \fIforeground-colour\fP ]
-[ \fB\-fc\fP \fIfixed-colour\fP ]
-[ \fB\-bg\fP \fIbackground-colour\fP ]
-[ \fB\-bw\fP \fIborderwidth\fP ]
-[ \fB\-snap\fP \fInum\fP ]
-[ \fB\-mask1\fP \fImodifiers\fP ]
-[ \fB\-mask2\fP \fImodifiers\fP ]
-[ \fB\-altmask\fP \fImodifier\fP ]
-[ [ \fB\-app\fP \fIname/class\fP ]
-[ \fB\-geometry\fP \fIgeometry\fP ]
-[ \fB\-dock\fP ]
-[ \fB\-vdesk\fP \fIvdesk\fP ]
-[ \fB\-fixed\fP ] ]...
-[ \fB\-nosoliddrag\fP ]
-[ \fB\-V\fP ]
-.SH DESCRIPTION
-.B evilwm
-is a minimalist window manager based on aewm, extended to feature
-many keyboard controls, and otherwise altered to be more friendly.
+'\" t
+.
+.\" ASCII for Unicode ellipsis is three dots
+.schar \[u2026] ...
+.\" New escape [...] maps to Unicode ellipsis
+.char \[...] \[u2026]
+.
+.\" an-ext.tmac: Check whether we are using grohtml.
+.nr mH 0
+.if \n(.g \
+.  if '\*(.T'html' \
+.    nr mH 1
+.
+.\" What about gropdf?
+.nr mP 0
+.if \n(.g \
+.  if '\*(.T'pdf' \
+.    nr mP 1
+.
+.\" an-ext.tmac: Start example.
+.de EX
+.  nr mE \\n(.f
+.  nf
+.  nh
+.  ft CW
+..
+.
+.\" an-ext.tmac: End example.
+.de EE
+.  ft \\n(mE
+.  fi
+.  hy \\n(HY
+..
+.
+.\" Top level heading; wraps .SH.  This seems to confuse lintian.
+.de H1
+.  if \\n(mP .pdfhref O 1 \\$*
+.  SH \\$*
+..
+.
+.\" 2nd level heading; wraps .SS
+.de H2
+.  if \\n(mP .pdfhref O 2 \\$*
+.  SS \\$*
+..
+.
+.\" 3rd level heading; bold font, no indent
+.de H3
+.  if \\n(.$ \{\
+.    if \\n(mP .pdfhref O 3 \\$*
+.    .B \&"\\$*"
+.  \}
+.  br
+..
+.
+.\" Render URL
+.de UU
+.  ie \\n(mH \{\
+\\$1\c
+.    do HTML-NS "<a href='\\$2'>"
+\\$2\c
+.    do HTML-NS "</a>"
+\\$3
+.  \}
+.  el \{\
+.    ie \\n(mP \{\
+.      pdfhref -W -P "\\$1" -A "\\$3" "\\$2"
+.    \}
+.    el \{\
+\\$1\\$2\\$3
+.    \}
+.  \}
+..
+.
+.\"
+.
+.ie \\n(mP \{\
+.  nr PDFOUTLINE.FOLDLEVEL 3
+.  pdfview /PageMode /UseOutlines
+.  pdfinfo /Title evilwm 1.3
+.  pdfinfo /Author Ciaran Anscomb
+.\}
+.
+.TH "evilwm" "1" "July 2021" "evilwm-1.3"
+.hy 0
+.nh
+.H1 NAME
 .PP
-In
-.BR evilwm ,
-the focus follows the mouse pointer, and focus is not lost if
-you stray onto the root window.  The current window border is shaded
-gold, with other windows left as a dark grey.
+evilwm\[em]minimalist window manager for X11
+.H1 SYNOPSIS
 .PP
-You can use the mouse to manipulate windows either by click/dragging
-the 1 pixel border, or by holding down Alt and doing so anywhere in the
-client window. The controls are:
+\fBevilwm\fR \[lB]\fIOPTION\fR\[rB]\[...]
+.H1 DESCRIPTION
+.PP
+\fBevilwm\fR is a minimalist window manager for the X Window System. It features plenty of mouse and keyboard controls while providing a clean display, uncluttered by less useful window furniture (like title bars).
+.H1 OPTIONS
+.TP
+\f(CB\-display\fR \fIdisplay\fR
+specifies the X display to run on. Usually this can be inferred from the \f(CBDISPLAY\fR environment variable.
+.TP
+\f(CB\-term\fR \fItermprog\fR
+specifies an alternative program to run when spawning a new terminal (defaults to xterm, or x-terminal-emulator in Debian). Separate arguments with whitespace, and escape needed whitespace with a backslash. Remember that special characters will also need to be protected from the shell.
+.TP
+\f(CB\-fn\fR \fIfontname\fR
+specify a font to use when resizing or displaying window titles.
+.TP
+\f(CB\-fg\fR \fIcolour\fR, \f(CB\-fc\fR \fIcolour\fR, \f(CB\-bg\fR \fIcolour\fR
+frame colour of currently active, fixed active, and inactive windows respectively. Either specify an X11 colour name like \f(CBgoldenrod\fR, or a hex triplet like \f(CB#DAA520\fR.
+.TP
+\f(CB\-bw\fR \fIborderwidth\fR
+width of window borders in pixels.
+.TP
+\f(CB\-snap\fR \fIdistance\fR
+enable snap-to-border support. \fIdistance\fR is the proximity in pixels to snap to.
+.TP
+\f(CB\-wholescreen\fR
+ignore monitor geometry and use the whole screen dimensions. This is the old behaviour from before multi-monitor support was implemented, and may still be useful, e.g., when one large monitor is driven from multiple outputs.
+.TP
+\f(CB\-numvdesks\fR \fIvalue\fR
+number of virtual desktops to provide. Defaults to 8. Any extras will only be accessible by pagers or using Control+Alt+(Left/Right).
+.TP
+\f(CB\-nosoliddrag\fR
+draw a window outline while moving or resizing.
+.TP
+\f(CB\-mask1\fR \fImodifiers\fR, \f(CB\-mask2\fR \fImodifiers\fR, \f(CB\-altmask\fR \fImodifiers\fR
+override the default keyboard modifiers used to grab keys for window manager functionality.
+.IP
+\f(CBmask1\fR is used for most keyboard controls (default: control+alt), and \f(CBmask2\fR is used for mouse button controls and cycling windows (default: alt). \f(CBaltmask\fR is used to modify the behaviour of certain controls (default: shift). Modifiers may be separated with + signs. Valid modifiers are shift, lock, control, alt, mod1, mod2, mod3, mod4, mod5.
+.TP
+\f(CB\-app\fR \fIname/class\fR
+match an application by instance name and class (for help in finding these, use the \fIxprop\fR tool to extract the \fIWM_CLASS\fR property).
+.IP
+Subsequent \f(CB\-geometry\fR, \f(CB\-dock\fR, \f(CB\-vdesk\fR and \f(CB\-fixed\fR options will apply to this match.
+.TP
+\f(CB\-g\fR, \f(CB\-geometry\fR \fIgeometry\fR
+apply a geometry (using a standard X geometry string) to applications matching the last \f(CB\-app\fR.
+.TP
+\f(CB\-dock\fR
+specify that application should be considered to be a dock, even if it lacks the appropriate property.
+.TP
+\f(CB\-v\fR, \f(CB\-vdesk\fR \fIvdesk\fR
+specify a default virtual desktop for applications matching the last \f(CB\-app\fR. Note that virtual desktops are numbered from zero.
+.TP
+\f(CB\-f\fR, \f(CB\-fixed\fR
+specify that application is to start with a fixed client window.
+.TP
+\f(CB\-help\fR
+show help
+.TP
+\f(CB\-V\fR
+show program version
+.PP
+\fBevilwm\fR will also read options, one per line, from a file called \fI.evilwmrc\fR in the user\[aq]s home directory. Options listed in a configuration file should omit the leading dash. Options specified on the command line override those found in the configuration file.
+.H1 USAGE
+.PP
+In \fBevilwm\fR, the focus follows the mouse pointer, and focus is not lost if you stray onto the root window. The current window border is shaded gold (unless it is fixed, in which case blue), with other windows left as a dark grey.
+.PP
+You can use the mouse to manipulate windows either by click/dragging the single-pixel border (easier when they align with a screen edge), or by holding down Alt and doing so anywhere in the window. The controls are:
 .TP
 Button 1
 Move window.
@@ -45,34 +166,31 @@ Resize window.
 Button 3
 Lower window.
 .PP
-Most keyboard controls are used by holding down Control and Alt, then
-pressing a key. Available functions are:
+Most keyboard controls are used by holding down Control and Alt, then pressing a key. Available functions are:
 .TP
 Return
 Spawn new terminal.
 .TP
 Escape
-Delete current window.  Hold Shift as well to force kill a client.
+Delete current window. Hold Shift as well to force kill a client.
 .TP
 Insert
 Lower current window.
 .TP
 H, J, K, L
-Move window left, down, up or right (16 pixels).  Holding Shift resizes the
-window instead.
+Move window left, down, up or right (16 pixels). Holding Shift resizes the window instead.
 .TP
 Y, U, B, N
-Move window to top-left, top-right, bottom-left or
-bottom-right of screen.
+Move window to the top-left, top-right, bottom-left or bottom-right of the current monitor.
 .TP
 I
 Show information about current window.
 .TP
 Equals
-Maximise current window vertically (toggle).
+Maximise current window vertically on current monitor (toggle). Holding Shift toggles horizontal maximization.
 .TP
 X
-Maximise current window (toggle).
+Maximise current window to current monitor (toggle).
 .TP
 D
 Toggle visible state of docks (e.g., pagers and launch bars).
@@ -80,113 +198,59 @@ Toggle visible state of docks (e.g., pagers and launch bars).
 If compiled with virtual desktop support, these functions are also available:
 .TP
 F
-Fix or unfix current window.
+Fix or unfix current window. Fixed windows remain visible when you switch virtual desktop.
 .TP
-1--8
-Switch virtual desktop.
+1\[em]8
+Switch to specific virtual desktop (internally, desktops are numbered from zero, so this actually switches to desktops 0\[em]7; this only becomes important if you use application matching).
 .TP
 Left
-Previous virtual desktop.
+Switch to next lower numbered virtual desktop.
 .TP
 Right
-Next virtual desktop.
+Switch to next higher numbered virtual desktop.
 .TP
 A
-Switch to the most recently unmapped virtual desktop.
+Switch to the previously selected virtual desktop.
 .PP
-In addition to the above, Alt+Tab can be used to cycle through windows
-on screen.
+In addition to the above, Alt+Tab can be used to cycle through windows.
 .PP
-To make
-.B evilwm
-exit, you have to kill the process.
-.SH OPTIONS
-.TP
-\-display \fIdisplay\fP
-specifies the X display to run on.
-.TP
-\-term \fItermprog\fP
-specifies an alternative program to run when spawning a new terminal (defaults
-to xterm, or x\-terminal\-emulator in Debian).  Separate arguments with
-whitespace, and escape needed whitespace with a backslash.  Remember that
-special characters will also need to be protected from the shell.
-.TP
-\-fn \fIfontname\fP
-specify a font to use when resizing or displaying window titles.
-.TP
-\-fg \fIforeground-colour\fP
-frame colour of currently active window.
-.TP
-\-fc \fIfixed-colour\fP
-frame colour of active fixed windows.
-.TP
-\-bg \fIbackground-colour\fP
-frame colour of inactive windows.
-.TP
-\-bw \fIborderwidth\fP
-width of window borders in pixels.
-.TP
-\-snap \fInum\fP
-enable snap-to-border support.  num gives the proximity in pixels to snap to.
-.TP
-\-mask1 \fImodifiers\fP, \-mask2 \fImodifiers\fP, \-altmask \fImodifier\fP
-override the default keyboard modifiers used to grab keys for window manager
-functionality.
-\fImask1\fP is used for most keyboard controls (default: control+alt),
-and \fImask2\fP is used for mouse button controls and cycling windows
-(default: alt).
-\fIaltmask\fP is used to modify the behaviour of certain controls
-(default: shift).
-Modifiers may be separated with + signs.
-Valid modifiers are shift, lock, control, alt, mod1, mod2, mod3, mod4,
-mod5.
-.TP
-\-app \fIname/class\fP
-match an application by instance name and class (for help in finding
-these, use the \fBxprop\fP tool to extract the \fIWM_CLASS\fP property).
-Subsequent \fI\-geometry\fP, \fI\-dock\fP, \fI\-vdesk\fP and \fI\-fixed\fP
-options will apply to this match.
-.TP
-\-g, -geometry \fIgeometry\fP
-apply a geometry (using a standard X geometry string) to applications matching
-the last
-.I \-app.
-.TP
-\-dock
-specify that application should be considered to be a dock, even if it lacks
-the appropriate property.
-.TP
-\-v, -vdesk \fIvdesk\fP
-specify a default virtual desktop for applications matching the last
-.I \-app.
-Note that desktops are numbered from 0.
-.TP
-\-f, -fixed
-specify that application is to start with a fixed client window (\fI\-s\fP is
-also accepted to be compatible with previous versions).
-.TP
-\-nosoliddrag
-draw a window outline while moving or resizing.
-.TP
-\-V
-print version number.
+To make \fBevilwm\fR exit, kill the process.
+.H1 FILES
 .PP
-.B evilwm
-will also read options, one per line, from a file called \fI.evilwmrc\fP
-in the user's home directory.
-Options listed in a configuration file should omit the leading dash.
-Options specified on the command line override those found in the
-configuration file.
-.SH FILES
-.I $HOME/.evilwmrc
-.SH BUGS
-The author's idea of friendly may differ to that of many other people.
-.SH AUTHOR
-Ciaran Anscomb <evilwm@6809.org.uk>.
-.br
-aewm was written by Decklin Foster <fosterd@hartwick.edu>.
-.br
-9wm was written by David Hogan <dhog@cs.su.oz.au>.
-.SH "SEE ALSO"
-.BR xterm (1),
-.BR xprop (1)
+\fI$HOME/.evilwmrc\fR
+.H1 BUGS
+.PP
+The author\[aq]s idea of friendly may differ to that of many other people.
+.H1 LICENCE
+.PP
+Copyright (C) 1999-2021 Ciaran Anscomb <evilwm@6809.org.uk>
+.PP
+This is free software. You can do what you want to it, but if it breaks something, you get to pay for the counselling. The code was originally based on aewm, so this is distributed under the same terms, which follow.
+.H1 AEWM LICENCE
+.PP
+Copyright (c) 1998-2000 Decklin Foster.
+.PP
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS", WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES OF ANY KIND. IN NO EVENT SHALL THE AUTHOR BE HELD LIABLE FOR ANY DAMAGES CONNECTED WITH THE USE OF THIS PROGRAM.
+.PP
+You are granted permission to copy, publish, distribute, and/or sell copies of this program and any modified versions or derived works, provided that this copyright and notice are not removed or altered.
+.PP
+Portions of the code were based on 9wm, which contains this license:
+.IP
+.EX
+9wm\ is\ free\ software,\ and\ is\ Copyright\ (c)\ 1994\ by\ David\ Hogan.
+Permission\ is\ granted\ to\ all\ sentient\ beings\ to\ use\ this
+software,\ to\ make\ copies\ of\ it,\ and\ to\ distribute\ those\ copies,
+provided\ that:
+\ \ (1)\ the\ copyright\ and\ licence\ notices\ are\ left\ intact
+\ \ (2)\ the\ recipients\ are\ aware\ that\ it\ is\ free\ software
+\ \ (3)\ any\ unapproved\ changes\ in\ functionality\ are\ either
+\ \ \ \ \ \ \ \ (i)\ only\ distributed\ as\ patches
+\ \ \ \ or\ (ii)\ distributed\ as\ a\ new\ program\ which\ is\ not\ called\ 9wm
+\ \ \ \ \ \ \ \ \ \ \ \ and\ whose\ documentation\ gives\ credit\ where\ it\ is\ due
+\ \ (4)\ the\ author\ is\ not\ held\ responsible\ for\ any\ defects
+\ \ \ \ \ \ or\ shortcomings\ in\ the\ software,\ or\ damages\ caused\ by\ it.
+There\ is\ no\ warranty\ for\ this\ software.\ \ Have\ a\ nice\ day.
+.EE
+.H1 SEE ALSO
+.PP
+\fBxterm\fR (1), \fBxprop\fR (1)

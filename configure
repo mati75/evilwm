@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# THIS IS NOT GNU CONFIGURE
+
+# It is a reasonably minimal 'configure' script that can do just enough to
+# enable multiarch cross-builds in Debian.
+
+unset host
+unset prefix
+#unset CFLAGS LDFLAGS
+
+while test -n "$1"; do
+	opt="$1"
+	case "$opt" in
+		--) shift; break; ;;
+		--host=*) host=${opt#*=}; ;;
+		--prefix=*) prefix=${opt#*=}; ;;
+		--mandir=*) mandir=${opt#*=}; ;;
+		CFLAGS=*) CFLAGS=${opt#*=}; ;;
+		LDFLAGS=*) LDFLAGS=${opt#*=}; ;;
+		--help|-h) echo "THIS IS NOT GNU CONFIGURE"; exit 0; ;;
+	esac
+	shift
+done
+
+cat /dev/null > config.mk
+test -n "$host" && echo "CC = ${host}-gcc" >> config.mk
+test -n "$prefix" && echo "prefix = $prefix" >> config.mk
+test -n "$CFLAGS" && echo "CFLAGS = $CFLAGS" >> config.mk
+test -n "$LDFLAGS" && echo "LDFLAGS = $LDFLAGS" >> config.mk
+
+exit 0

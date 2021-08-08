@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+
+<style type='text/css' media='screen'>
+
+body { max-width: 48rem; }
+
+</style>
+
+<style type='text/css' media='print'>
+
+body { font-size: 12pt; }
+pre { font-size: 12pt; letter-spacing: 0.1em; }
+code { font-size: 11pt; letter-spacing: 0.1em; }
+a { color: inherit; text-decoration: none; }
+
+</style>
+
+<style type='text/css' media='screen,print'>
+
+body { font-family: "Liberation Serif", serif; }
+code,pre { font-family: "Inconsolata", monospace; }
+code { font-weight: bold; }
+var { font-style: italic; }
+
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.1875rem; }
+h3 { font-size: 1rem; }
+code,pre { font-size: small; }
+
+body { margin-left: 3rem; padding-left: 0.75rem; padding-right: 0.75rem; }
+h1 { margin-left: -3rem; }
+h2 { margin-left: -3rem; }
+h3 { margin-left: -1.5rem; }
+pre { margin-left: 1.5rem; }
+table { margin-left: 1.5rem; }
+
+h1 { margin-top: 1.3125rem; margin-bottom: 1.3125rem; }
+h2 { margin-top: 1.1875rem; margin-bottom: 0.1875rem; }
+h3 { margin-top: 1.125rem; margin-bottom: 0.125rem; }
+p { margin-top: 1rem; margin-bottom: 1rem; }
+pre { margin-top: 1rem; margin-bottom: 1rem; }
+
+h1+* { margin-top: 0.3125rem; }
+h2+* { margin-top: 0.1875rem; }
+h3+* { margin-top: 0.125rem; }
+
+dd { margin-top: none; margin-bottom: 1rem; }
+dl.compact dd { margin-bottom: 0.0625rem; }
+
+h1,h2,h3 { page-break-after: avoid; }
+h1+*,h2+*,h3+* { page-break-before: avoid; }
+dt+dd { page-break-before: avoid; }
+
+p { text-align: justify; }
+dd { text-align: justify; }
+
+table { border-collapse: collapse; border-style: hidden hidden none hidden; }
+table thead { border-bottom: solid; }
+table thead th { text-align: left; }
+table tbody { border-bottom: solid thin; }
+table tbody th { text-align: left; }
+table td, table th { border-left: solid thin; border-right: solid thin; border-bottom: none; vertical-align: top; padding: 0 0.1875rem 0.0625rem; }
+
+</style>
+
+</head>
+
+<body>
+
+<h1 pdf:author="Ciaran Anscomb">evilwm installation guide</h1>
+
+
+<h2>Building from source</h2>
+
+<p>See the <a href='https://www.6809.org.uk/evilwm/'/>evilwm home page</a> for
+downloads.  Once you have a copy of the source code, either the git repository
+or by downloading a tar archive, building is very straightforward.
+
+<p>In addition to the standard C compiler tools, you will need X11 development
+files installed.  Under Debian, the <tt>x11proto-dev</tt>, <tt>libx11-dev</tt>
+and <tt>libxrandr-dev</tt> packages should suffice.
+
+<p>The source distribution does contain a <tt>configure</tt> script, but this
+is <em>not</em> from the GNU build system.  It is a minimal bash script
+provided to simplify multiarch cross-builds under Debian.  Instead, edit the
+<tt>Makefile</tt> to modify build flags for your platform.
+
+<p>Then, building and installing is very simple:
+
+<pre>
+$ <b>make</b>
+$ <b>make install</b>
+</pre>
+
+<p>That's it!  But if you need to install to a different prefix, you can
+override with something like:
+
+<pre>
+$ <b>make install prefix=/usr/local</b>
+</pre>
+
+
+<h2>Starting evilwm</h2>
+
+<p>The install process puts a file called <tt>evilwm.desktop</tt> into
+<tt>/usr/share/applications</tt>, so depending on your desktop manager, you may
+simply be able to pick <i>evilwm</i> from a menu.  Otherwise, most managers
+will run <tt>Xsession</tt>, which will look for a file in your home directory
+called <tt>.xsession</tt> and run it (so be sure it has execute permission).
+Here's a simple example <tt>.xsession</tt> file:
+
+<pre>
+#!/bin/sh
+test -f $HOME/.Xresources &amp;&amp; xrdb -merge $HOME/.Xresources
+xsetroot -solid \#400040 -cursor_name left_ptr
+( /usr/bin/evilwm -snap 10 &gt;/dev/null 2&gt;&amp;1 &amp; )
+exec xclock -digital -padding 2 -g -0+0
+</pre>
+
+<p>The cursor shape and background colour are set with standard X tools
+(<i>evilwm</i> won't do this for you).  <i>xclock</i> becomes the "magic
+process" (session terminates when it is killed).  <i>evilwm</i> itself is
+started in a subshell otherwise <i>xclock</i> would become its parent, and
+killing <i>evilwm</i> to restart it may result in a zombie process.  You could
+also avoid this by not <code>exec</code>-ing the "magic process"; the shell
+will handle child signals properly.
+
+<p><a href='xsession.txt'>See here for a more complete example of a
+<tt>.xsession</tt> file</a>.  Obviously, it depends on a lot of external
+packages.
+
+<p>You used to be able to configure the GNOME session manager to use
+<i>evilwm</i> as its window manager by running <tt>gconf-editor</tt> and
+setting the key
+<tt>/desktop/gnome/session/required_components/windowmanager</tt> to
+<tt>evilwm</tt>.  The package information for <i>gconf-editor</i> suggests
+this approach is out of date, however.
+
+<p>If you typically start X by typing <tt>startx</tt> from the console, you
+might need the <tt>.xsession</tt> file to be called <tt>.xinitrc</tt>.  A
+symlink should suffice.
+
+<p>After starting, you should be able to bring up an xterm with
+<kbd>Control</kbd>+<kbd>Alt</kbd>+<kbd>Enter</kbd>.  For more information on
+configuring and using <i>evilwm</i>,
+<a href='https://www.6809.org.uk/evilwm/manual.shtml'>see the manual</a>.
+
+
+</body>
+</html>

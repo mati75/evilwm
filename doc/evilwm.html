@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+
+<style type='text/css' media='screen'>
+
+body { max-width: 48rem; }
+
+</style>
+
+<style type='text/css' media='print'>
+
+body { font-size: 12pt; }
+pre { font-size: 12pt; letter-spacing: 0.1em; }
+code { font-size: 11pt; letter-spacing: 0.1em; }
+a { color: inherit; text-decoration: none; }
+
+</style>
+
+<style type='text/css' media='screen,print'>
+
+body { font-family: "Liberation Serif", serif; }
+code,pre { font-family: "Inconsolata", monospace; }
+code { font-weight: bold; }
+var { font-style: italic; }
+
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.1875rem; }
+h3 { font-size: 1rem; }
+code,pre { font-size: small; }
+
+body { margin-left: 3rem; padding-left: 0.75rem; padding-right: 0.75rem; }
+h1 { margin-left: -3rem; }
+h2 { margin-left: -3rem; }
+h3 { margin-left: -1.5rem; }
+pre { margin-left: 1.5rem; }
+table { margin-left: 1.5rem; }
+
+h1 { margin-top: 1.3125rem; margin-bottom: 1.3125rem; }
+h2 { margin-top: 1.1875rem; margin-bottom: 0.1875rem; }
+h3 { margin-top: 1.125rem; margin-bottom: 0.125rem; }
+p { margin-top: 1rem; margin-bottom: 1rem; }
+pre { margin-top: 1rem; margin-bottom: 1rem; }
+
+h1+* { margin-top: 0.3125rem; }
+h2+* { margin-top: 0.1875rem; }
+h3+* { margin-top: 0.125rem; }
+
+dd { margin-top: none; margin-bottom: 1rem; }
+dl.compact dd { margin-bottom: 0.0625rem; }
+
+h1,h2,h3 { page-break-after: avoid; }
+h1+*,h2+*,h3+* { page-break-before: avoid; }
+dt+dd { page-break-before: avoid; }
+
+p { text-align: justify; }
+dd { text-align: justify; }
+
+table { border-collapse: collapse; border-style: hidden hidden none hidden; }
+table thead { border-bottom: solid; }
+table thead th { text-align: left; }
+table tbody { border-bottom: solid thin; }
+table tbody th { text-align: left; }
+table td, table th { border-left: solid thin; border-right: solid thin; border-bottom: none; vertical-align: top; padding: 0 0.1875rem 0.0625rem; }
+
+</style>
+
+</head>
+
+<body>
+
+<h1 man:date='July 2021' man:section='1' man:dist='evilwm-1.3' pdf:title="evilwm 1.3" pdf:author="Ciaran Anscomb">evilwm</h1>
+
+<h2 id='name'>NAME</h2>
+
+<p>evilwm—minimalist window manager for X11
+
+<h2 id='synopsis'>SYNOPSIS</h2>
+
+<p><strong>evilwm</strong> [<var>OPTION</var>]…
+
+<h2 id='description'>DESCRIPTION</h2>
+
+<p><strong>evilwm</strong> is a minimalist window manager for the X Window
+System.  It features plenty of mouse and keyboard controls while providing a
+clean display, uncluttered by less useful window furniture (like title bars).
+
+<h2 id='options'>OPTIONS</h2>
+
+<dl class='compact'>
+
+<dt><code>-display</code> <var>display</var>
+
+<dd>specifies the X display to run on.  Usually this can be inferred from the
+<code>DISPLAY</code> environment variable.
+
+<dt><code>-term</code> <var>termprog</var>
+
+<dd>specifies an alternative program to run when spawning a new terminal
+(defaults to xterm, or x-terminal-emulator in Debian).  Separate arguments with
+whitespace, and escape needed whitespace with a backslash.  Remember that
+special characters will also need to be protected from the shell.
+
+<dt><code>-fn</code> <var>fontname</var>
+
+<dd>specify a font to use when resizing or displaying window titles.
+
+<dt><code>-fg</code> <var>colour</var>, <code>-fc</code> <var>colour</var>, <code>-bg</code> <var>colour</var>
+
+<dd>frame colour of currently active, fixed active, and inactive windows
+respectively.  Either specify an X11 colour name like <code>goldenrod</code>,
+or a hex triplet like <code>#DAA520</code>.
+
+<dt><code>-bw</code> <var>borderwidth</var>
+
+<dd>width of window borders in pixels.
+
+<dt><code>-snap</code> <var>distance</var>
+
+<dd>enable snap-to-border support.  <var>distance</var> is the proximity in
+pixels to snap to.
+
+<dt><code>-wholescreen</code>
+
+<dd>ignore monitor geometry and use the whole screen dimensions.  This is the
+old behaviour from before multi-monitor support was implemented, and may still
+be useful, e.g., when one large monitor is driven from multiple outputs.
+
+<dt><code>-numvdesks</code> <var>value</var>
+
+<dd>number of virtual desktops to provide.  Defaults to 8.  Any extras will
+only be accessible by pagers or using
+<kbd>Control</kbd>+<kbd>Alt</kbd>+(<kbd>Left</kbd>/<kbd>Right</kbd>).
+
+<dt><code>-nosoliddrag</code>
+
+<dd>draw a window outline while moving or resizing.
+
+</dl>
+
+<dl class='compact'>
+
+<dt><code>-mask1</code> <var>modifiers</var>, <code>-mask2</code> <var>modifiers</var>, <code>-altmask</code> <var>modifiers</var>
+
+<dd>override the default keyboard modifiers used to grab keys for window manager
+functionality.
+
+<p><code>mask1</code> is used for most keyboard controls (default: control+alt), and <code>mask2</code> is used for mouse button controls and cycling
+windows (default: alt).  <code>altmask</code> is used to modify the behaviour of
+certain controls (default: shift).  Modifiers may be separated with + signs.
+Valid modifiers are shift, lock, control, alt, mod1, mod2, mod3, mod4, mod5.
+
+</dl>
+
+<dl class='compact'>
+
+<dt><code>-app</code> <var>name/class</var>
+
+<dd>match an application by instance name and class (for help in finding these,
+use the <em>xprop</em> tool to extract the <em>WM_CLASS</em> property).
+
+<p>Subsequent <code>-geometry</code>, <code>-dock</code>, <code>-vdesk</code>
+and <code>-fixed</code> options will apply to this match.
+
+<dt><code>-g</code>, <code>-geometry</code> <var>geometry</var>
+
+<dd>apply a geometry (using a standard X geometry string) to applications
+matching the last <code>-app</code>.
+
+<dt><code>-dock</code>
+
+<dd>specify that application should be considered to be a dock, even if it lacks
+the appropriate property.
+
+<dt><code>-v</code>, <code>-vdesk</code> <var>vdesk</var>
+
+<dd>specify a default virtual desktop for applications matching the last
+<code>-app</code>.  Note that virtual desktops are numbered from zero.
+
+<dt><code>-f</code>, <code>-fixed</code>
+
+<dd>specify that application is to start with a fixed client window.
+
+</dl>
+
+<dl class='compact'>
+
+<dt><code>-help</code>
+
+<dd>show help
+
+<dt><code>-V</code>
+
+<dd>show program version
+
+</dl>
+
+<p><strong>evilwm</strong> will also read options, one per line, from a file called <em>.evilwmrc</em> in the user's home directory.  Options listed in a
+configuration file should omit the leading dash.  Options specified on the
+command line override those found in the configuration file.
+
+
+<h2 id='usage'>USAGE</h2>
+
+<p>In <strong>evilwm</strong>, the focus follows the mouse pointer, and focus
+is not lost if you stray onto the root window.  The current window border is
+shaded gold (unless it is fixed, in which case blue), with other windows left
+as a dark grey.
+
+<p>You can use the mouse to manipulate windows either by click/dragging the
+single-pixel border (easier when they align with a screen edge), or by holding
+down Alt and doing so anywhere in the window. The controls are:
+
+<dl>
+
+<dt><kbd>Button 1</kbd>
+
+<dd>Move window.
+
+<dt><kbd>Button 2</kbd>
+
+<dd>Resize window.
+
+<dt><kbd>Button 3</kbd>
+
+<dd>Lower window.
+
+</dl>
+
+<p>Most keyboard controls are used by holding down <kbd>Control</kbd> and
+<kbd>Alt</kbd>, then pressing a key. Available functions are:
+
+<dl>
+
+<dt><kbd>Return</kbd>
+
+<dd>Spawn new terminal.
+
+<dt><kbd>Escape</kbd>
+
+<dd>Delete current window.  Hold <kbd>Shift</kbd> as well to force kill a client.
+
+<dt><kbd>Insert</kbd>
+
+<dd>Lower current window.
+
+<dt><kbd>H</kbd>, <kbd>J</kbd>, <kbd>K</kbd>, <kbd>L</kbd>
+
+<dd>Move window left, down, up or right (16 pixels).  Holding <kbd>Shift</kbd>
+resizes the window instead.
+
+<dt><kbd>Y</kbd>, <kbd>U</kbd>, <kbd>B</kbd>, <kbd>N</kbd>
+
+<dd>Move window to the top-left, top-right, bottom-left or bottom-right of the
+current monitor.
+
+<dt><kbd>I</kbd>
+
+<dd>Show information about current window.
+
+<dt><kbd>Equals</kbd>
+
+<dd>Maximise current window vertically on current monitor (toggle).  Holding
+<kbd>Shift</kbd> toggles horizontal maximization.
+
+<dt><kbd>X</kbd>
+
+<dd>Maximise current window to current monitor (toggle).
+
+<dt><kbd>D</kbd>
+
+<dd>Toggle visible state of docks (e.g., pagers and launch bars).
+
+</dl>
+
+<p>If compiled with virtual desktop support, these functions are also available:
+
+<dl>
+
+<dt><kbd>F</kbd>
+
+<dd>Fix or unfix current window.  Fixed windows remain visible when you switch
+virtual desktop.
+
+<dt><kbd>1</kbd>—<kbd>8</kbd>
+
+<dd>Switch to specific virtual desktop (internally, desktops are numbered from
+zero, so this actually switches to desktops 0—7; this only becomes important if
+you use application matching).
+
+<dt><kbd>Left</kbd>
+
+<dd>Switch to next lower numbered virtual desktop.
+
+<dt><kbd>Right</kbd>
+
+<dd>Switch to next higher numbered virtual desktop.
+
+<dt><kbd>A</kbd>
+
+<dd>Switch to the previously selected virtual desktop.
+
+</dl>
+
+<p>In addition to the above, <kbd>Alt</kbd>+<kbd>Tab</kbd> can be used to cycle
+through windows.
+
+<p>To make <strong>evilwm</strong> exit, kill the process.
+
+
+<h2 id='files'>FILES</h2>
+
+<p><em>$HOME/.evilwmrc</em>
+
+
+<h2 id='bugs'>BUGS</h2>
+
+<p>The author's idea of friendly may differ to that of many other people.
+
+
+<h2 id='licence'>LICENCE</h2>
+
+<p>Copyright (C) 1999-2021 Ciaran Anscomb &lt;evilwm@6809.org.uk&gt;
+
+<p>This is free software.  You can do what you want to it, but if it breaks
+something, you get to pay for the counselling.  The code was originally
+based on aewm, so this is distributed under the same terms, which follow.
+
+
+<h2>AEWM LICENCE</h2>
+
+<p>Copyright (c) 1998-2000 Decklin Foster.
+
+<p>THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS", WITHOUT ANY EXPRESS
+OR IMPLIED WARRANTIES OF ANY KIND. IN NO EVENT SHALL THE AUTHOR BE HELD
+LIABLE FOR ANY DAMAGES CONNECTED WITH THE USE OF THIS PROGRAM.
+
+<p>You are granted permission to copy, publish, distribute, and/or sell
+copies of this program and any modified versions or derived works,
+provided that this copyright and notice are not removed or altered.
+
+<p>Portions of the code were based on 9wm, which contains this license:
+
+<pre>
+9wm is free software, and is Copyright (c) 1994 by David Hogan.
+Permission is granted to all sentient beings to use this
+software, to make copies of it, and to distribute those copies,
+provided that:
+
+  (1) the copyright and licence notices are left intact
+  (2) the recipients are aware that it is free software
+  (3) any unapproved changes in functionality are either
+        (i) only distributed as patches
+    or (ii) distributed as a new program which is not called 9wm
+            and whose documentation gives credit where it is due
+  (4) the author is not held responsible for any defects
+      or shortcomings in the software, or damages caused by it.
+
+There is no warranty for this software.  Have a nice day.
+</pre>
+
+
+<h2 id='seealso'>SEE ALSO</h2>
+
+<p><strong>xterm</strong> (1), <strong>xprop</strong> (1)
+
+
+</body>
+</html>

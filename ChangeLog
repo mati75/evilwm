@@ -1,3 +1,31 @@
+Version 1.3.1, Fri Jul 30 2021
+
+  * Documentation updates & fixes only.
+
+Version 1.3.0, Fri Jul 16 2021
+
+  * Add EWMH 1.5 _NET_WM_STATE_FOCUSED support.
+  * Add basic multi-monitor support when Randr >= 1.5 available.
+  * Remove border when window is maximised (useful for multi-monitor).
+  * Set _NET_FRAME_EXTENTS whenever relevant.
+  * Add new -wholescreen option to reinstate old behaviour of treating screen
+    as one large display.
+  * Remove -DVWM build option.  User can run with "-numvdesks 1" if necessary.
+
+Version 1.2.1, Mon Jul  5 2021
+
+  * Fix QWERTZ_KEYMAP build option [Sime Ramov]
+
+Version 1.2.0, Mon Jul  5 2021
+
+  * Code reorder.  Better code separation and many more/better comments.
+  * Don't focus mapped window if pointer not on same screen [by Ben Stern]
+  * Added QWERTZ_KEYMAP build option [by Thomas Egerer]
+  * Remove option to exclude help and error messages.
+  * Set focus to root window when closing current [adapted from Arch patch]
+  * Add tiny configure script to help with Debian multiarch cross-builds.
+  * Generate some documentation from HTML source.
+
 Version 1.1.1, Mon Jul 13 2015
 
   * Revert client lowering behaviour from 1.1.0.  Also fixes a build error
