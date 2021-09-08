@@ -10,5 +10,5 @@ Abstract: evilwm - minimalist window manager for X11
 Section: Window Managers
 
 Format: HTML
-Index: /usr/share/doc/evilwm/standards.html
-Files: /usr/share/doc/evilwm/standards.html
+Index: /usr/share/doc/evilwm/evilwm.html
+Files: /usr/share/doc/evilwm/*.html
