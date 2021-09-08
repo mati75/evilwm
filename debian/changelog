@@ -17,6 +17,7 @@ evilwm (1.3.1-1) UNRELEASED; urgency=medium
   * Bump standards version to 4.6.0
   * Drop d/patches/fix-lost-focus.patch -- included upstream.
   * Add Rules-Requires-Root.
+  * Bump d/watch to 4.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 08 Aug 2021 20:12:43 +0200
 
