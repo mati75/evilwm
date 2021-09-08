@@ -2,6 +2,7 @@ Description: Fix show up window manager in display manager.
 Author: Mateusz Łukasik <mati75@linuxmint.pl>
 Bug-Debian: http://bugs.debian.org/596427
 Bug-Debian: http://bugs.debian.org/703986
+Forwarded: not-needed
 
 --- a/evilwm.desktop
 +++ b/evilwm.desktop

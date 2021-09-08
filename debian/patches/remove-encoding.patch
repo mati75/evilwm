@@ -1,5 +1,6 @@
 Description: Remove encoding from desktop file.
 Author: Mateusz Łukasik <mati75@linuxmint.pl>
+Forwarded: not-needed
 
 --- a/evilwm.desktop
 +++ b/evilwm.desktop

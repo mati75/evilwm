@@ -1,5 +1,6 @@
 Description: Disable CFLAGS for hardening all
 Author: Mateusz Łukasik <mati75@linuxmint.pl>, Markus <waldeck@gmx.de>
+Forwarded: not-needed
 
 --- a/Makefile
 +++ b/Makefile

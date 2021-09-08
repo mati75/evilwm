@@ -1,0 +1,48 @@
+Description: Disable build docs in pdf
+Author: Mateusz Łukasik <mati75@linuxmint.pl>
+
+Origin: upstream
+Forwarded: not-needed
+
+--- a/doc/Makefile
++++ b/doc/Makefile
+@@ -1,5 +1,5 @@
+ .PHONY: all
+-all: evilwm.pdf evilwm.txt build.txt
++all: evilwm.txt build.txt
+ 
+ evilwm.1: manpage-header evilwm.html
+ 	(cat manpage-header; hxnormalize -xe -l 99999 evilwm.html | hxpipe | ./html2man.pl) > $@
+@@ -7,9 +7,6 @@ evilwm.1: manpage-header evilwm.html
+ build.1: manpage-header build.html
+ 	(cat manpage-header; hxnormalize -xe -l 99999 build.html | hxpipe | ./html2man.pl) > $@
+ 
+-evilwm.pdf: evilwm.1
+-	./man2pdf.sh $< $@
+-
+ evilwm.txt: evilwm.1
+ 	./man2txt.sh $< $@
+ 
+@@ -18,5 +15,5 @@ build.txt: build.1
+ 
+ .PHONY: all
+ clean:
+-	rm -f evilwm.1 evilwm.pdf evilwm.txt
++	rm -f evilwm.1 evilwm.txt
+ 	rm -f build.1 build.txt
+--- a/evilwm.1
++++ b/evilwm.1
+@@ -74,13 +74,6 @@
+ .
+ .\"
+ .
+-.ie \\n(mP \{\
+-.  nr PDFOUTLINE.FOLDLEVEL 3
+-.  pdfview /PageMode /UseOutlines
+-.  pdfinfo /Title evilwm 1.3
+-.  pdfinfo /Author Ciaran Anscomb
+-.\}
+-.
+ .TH "evilwm" "1" "July 2021" "evilwm-1.3"
+ .hy 0
+ .nh
