@@ -18,6 +18,11 @@ evilwm (1.3.1-1) UNRELEASED; urgency=medium
   * Drop d/patches/fix-lost-focus.patch -- included upstream.
   * Add Rules-Requires-Root.
   * Bump d/watch to 4.
+  * Drop menu file.
+  * Update d/evilwm.doc-base.
+  * Add d/patches/drop_build_pdf.patch -- for disable build docs in pdf.
+  * Add d/upstream/metadata.
+  * Add Forwarded: not-needed to all patches.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 08 Aug 2021 20:12:43 +0200
 
