@@ -1,4 +1,4 @@
-evilwm (1.3.1-1) UNRELEASED; urgency=medium
+evilwm (1.3.1-1) unstable; urgency=medium
 
   [ Jelmer Vernooĳ ]
   * Use secure URI in Vcs control header.
@@ -24,7 +24,7 @@ evilwm (1.3.1-1) UNRELEASED; urgency=medium
   * Add d/upstream/metadata.
   * Add Forwarded: not-needed to all patches.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 08 Aug 2021 20:12:43 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 08 Sep 2021 22:09:19 +0200
 
 evilwm (1.1.1-1) unstable; urgency=medium
 
