@@ -1,4 +1,2 @@
-remove-encoding.patch
-show-in-login-manager.patch
 enable_hardening.patch
 drop_build_pdf.patch

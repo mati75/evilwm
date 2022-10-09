@@ -1,6 +1,7 @@
 evilwm (1.4.0-1) UNRELEASED; urgency=medium
 
-  * New upstream release.
+  * New upstream release:
+    + Removed patches included upstream and refreshed rest. 
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 09 Oct 2022 21:05:53 +0200
 
