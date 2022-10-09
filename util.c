@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2021 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // Miscellaneous utility functions
@@ -22,6 +22,7 @@
 #include "client.h"
 #include "display.h"
 #include "events.h"
+#include "evilwm.h"
 #include "log.h"
 #include "screen.h"
 #include "util.h"
@@ -155,6 +156,26 @@ void *get_property(Window w, Atom property, Atom req_type,
 	}
 	return NULL;
 }
+
+// Determine the normal border size for a window.  MWM hints seem to be the
+// only way clients can signal they don't want a border.
+
+int window_normal_border(Window w) {
+	int bw = option.bw;
+	PropMwmHints *mprop;
+	unsigned long nitems;
+	if ( (mprop = get_property(w, X_ATOM(_MOTIF_WM_HINTS), X_ATOM(_MOTIF_WM_HINTS), &nitems)) ) {
+		if (nitems >= PROP_MWM_HINTS_ELEMENTS
+		    && (mprop->flags & MWM_HINTS_DECORATIONS)
+		    && !(mprop->decorations & MWM_DECOR_ALL)
+		    && !(mprop->decorations & MWM_DECOR_BORDER)) {
+			bw = 0;
+		}
+		XFree(mprop);
+	}
+	return bw;
+}
+
 
 // interruptibleXNextEvent() is taken from the Blender source and comes with
 // the following copyright notice:

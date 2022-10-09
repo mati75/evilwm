@@ -1,4 +1,5 @@
 ## ignore build files
+config.mk
 *.o
 evilwm
 ## common temporary files (really ought to be in peoples' ~/.gitignore)

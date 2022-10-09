@@ -48,7 +48,7 @@ h2+* { margin-top: 0.1875rem; }
 h3+* { margin-top: 0.125rem; }
 
 dd { margin-top: none; margin-bottom: 1rem; }
-dl.compact dd { margin-bottom: 0.0625rem; }
+dl.compact dd,p { margin-bottom: 0.0625rem; }
 
 h1,h2,h3 { page-break-after: avoid; }
 h1+*,h2+*,h3+* { page-break-before: avoid; }
@@ -70,70 +70,77 @@ table td, table th { border-left: solid thin; border-right: solid thin; border-b
 
 <body>
 
-<h1 man:date='July 2021' man:section='1' man:dist='evilwm-1.3' pdf:title="evilwm 1.3" pdf:author="Ciaran Anscomb">evilwm</h1>
+<h1 man:date='September 2022' man:section='1' man:dist='evilwm-1.4' pdf:title="evilwm 1.4" pdf:author="Ciaran Anscomb">evilwm</h1>
+
 
 <h2 id='name'>NAME</h2>
 
 <p>evilwm—minimalist window manager for X11
 
+
 <h2 id='synopsis'>SYNOPSIS</h2>
 
 <p><strong>evilwm</strong> [<var>OPTION</var>]…
 
+
 <h2 id='description'>DESCRIPTION</h2>
 
 <p><strong>evilwm</strong> is a minimalist window manager for the X Window
-System.  It features plenty of mouse and keyboard controls while providing a
-clean display, uncluttered by less useful window furniture (like title bars).
+System.  It features plenty of reconfigurable mouse and keyboard controls while
+providing a clean display, uncluttered by less useful window furniture (like
+title bars).
+
 
 <h2 id='options'>OPTIONS</h2>
 
 <dl class='compact'>
 
-<dt><code>-display</code> <var>display</var>
+<dt><code>--display</code> <var>display</var>
 
 <dd>specifies the X display to run on.  Usually this can be inferred from the
 <code>DISPLAY</code> environment variable.
 
-<dt><code>-term</code> <var>termprog</var>
+<dt><code>--term</code> <var>termprog</var>
 
 <dd>specifies an alternative program to run when spawning a new terminal
 (defaults to xterm, or x-terminal-emulator in Debian).  Separate arguments with
 whitespace, and escape needed whitespace with a backslash.  Remember that
 special characters will also need to be protected from the shell.
 
-<dt><code>-fn</code> <var>fontname</var>
+<dt><code>--fn</code> <var>fontname</var>
 
 <dd>specify a font to use when resizing or displaying window titles.
 
-<dt><code>-fg</code> <var>colour</var>, <code>-fc</code> <var>colour</var>, <code>-bg</code> <var>colour</var>
+<dt><code>--fg</code> <var>colour</var>
+<dt><code>--fc</code> <var>colour</var>
+<dt><code>--bg</code> <var>colour</var>
 
 <dd>frame colour of currently active, fixed active, and inactive windows
 respectively.  Either specify an X11 colour name like <code>goldenrod</code>,
 or a hex triplet like <code>#DAA520</code>.
 
-<dt><code>-bw</code> <var>borderwidth</var>
+<dt><code>--bw</code> <var>borderwidth</var>
 
 <dd>width of window borders in pixels.
 
-<dt><code>-snap</code> <var>distance</var>
+<dt><code>--snap</code> <var>distance</var>
 
 <dd>enable snap-to-border support.  <var>distance</var> is the proximity in
 pixels to snap to.
 
-<dt><code>-wholescreen</code>
+<dt><code>--wholescreen</code>
 
 <dd>ignore monitor geometry and use the whole screen dimensions.  This is the
 old behaviour from before multi-monitor support was implemented, and may still
-be useful, e.g., when one large monitor is driven from multiple outputs.
+be useful, eg when one large monitor is driven from multiple outputs.
 
-<dt><code>-numvdesks</code> <var>value</var>
+<dt><code>--numvdesks</code> <var>value</var>
 
 <dd>number of virtual desktops to provide.  Defaults to 8.  Any extras will
 only be accessible by pagers or using
 <kbd>Control</kbd>+<kbd>Alt</kbd>+(<kbd>Left</kbd>/<kbd>Right</kbd>).
 
-<dt><code>-nosoliddrag</code>
+<dt><code>--nosoliddrag</code>
 
 <dd>draw a window outline while moving or resizing.
 
@@ -141,44 +148,64 @@ only be accessible by pagers or using
 
 <dl class='compact'>
 
-<dt><code>-mask1</code> <var>modifiers</var>, <code>-mask2</code> <var>modifiers</var>, <code>-altmask</code> <var>modifiers</var>
+<dt><code>--mask1</code> <var>modifier</var>[+<var>modifier</var>]…
+<dt><code>--mask2</code> <var>modifier</var>[+<var>modifier</var>]…
+<dt><code>--altmask</code> <var>modifier</var>[+<var>modifier</var>]…
 
-<dd>override the default keyboard modifiers used to grab keys for window manager
-functionality.
+<dd>override the default keyboard modifiers used to grab keys for window
+manager functionality.
 
-<p><code>mask1</code> is used for most keyboard controls (default: control+alt), and <code>mask2</code> is used for mouse button controls and cycling
-windows (default: alt).  <code>altmask</code> is used to modify the behaviour of
-certain controls (default: shift).  Modifiers may be separated with + signs.
-Valid modifiers are shift, lock, control, alt, mod1, mod2, mod3, mod4, mod5.
+<p><code>mask1</code> is used for most keyboard controls (default:
+control+alt), and <code>mask2</code> is used for mouse button controls and
+cycling windows (default: alt).  <code>altmask</code> is used to modify the
+behaviour of certain controls (default: shift).  Modifiers may be separated
+with + signs.  Valid modifiers are 'shift', 'control', 'alt', 'mod1'…'mod5'.
+
+<dt><code>--bind</code> <var>key</var>[+<var>modifier</var>]…=[<var>function</var>[,<var>flag</var>]…]
+
+<dd>bind a key pressed with specified modifiers to a window manager function.
+<var>key</var> is an X11 keysym name, <var>modifiers</var> are as above, but
+may also include 'mask1', 'mask2' and 'altmask' to refer to the
+globally-configured combinations.  See <a href='#functions'>FUNCTIONS</a> for a
+list of available functions and the flags they recognise.  If
+<var>function</var> is empty, a bind is removed.
+
+<dt><code>--bind</code> <var>button</var>=[<var>function</var>[,<var>flag</var>]…]
+
+<dd>bind a mouse button to a window manager function.  While modifiers can be
+specified, they will be ignored; the button on its own will trigger if pressed
+within a window's frame, or with 'mask2' held anywhere within a window.
+Function and flags is as with key binds above.  Valid buttons are
+'button1'…'button5'.
 
 </dl>
 
 <dl class='compact'>
 
-<dt><code>-app</code> <var>name/class</var>
+<dt><code>--app</code> <var>name/class</var>
 
 <dd>match an application by instance name and class (for help in finding these,
 use the <em>xprop</em> tool to extract the <em>WM_CLASS</em> property).
 
-<p>Subsequent <code>-geometry</code>, <code>-dock</code>, <code>-vdesk</code>
-and <code>-fixed</code> options will apply to this match.
+<p>Subsequent <code>--geometry</code>, <code>--dock</code>,
+<code>--vdesk</code> and <code>--fixed</code> options will apply to this match.
 
-<dt><code>-g</code>, <code>-geometry</code> <var>geometry</var>
+<dt><code>-g</code>, <code>--geometry</code> <var>geometry</var>
 
 <dd>apply a geometry (using a standard X geometry string) to applications
-matching the last <code>-app</code>.
+matching the last <code>--app</code>.
 
-<dt><code>-dock</code>
+<dt><code>--dock</code>
 
-<dd>specify that application should be considered to be a dock, even if it lacks
-the appropriate property.
+<dd>specify that application should be considered to be a dock, even if it
+lacks the appropriate property.
 
-<dt><code>-v</code>, <code>-vdesk</code> <var>vdesk</var>
+<dt><code>-v</code>, <code>--vdesk</code> <var>vdesk</var>
 
 <dd>specify a default virtual desktop for applications matching the last
-<code>-app</code>.  Note that virtual desktops are numbered from zero.
+<code>--app</code>.  Note that virtual desktops are numbered from zero.
 
-<dt><code>-f</code>, <code>-fixed</code>
+<dt><code>-f</code>, <code>--fixed</code>
 
 <dd>specify that application is to start with a fixed client window.
 
@@ -186,18 +213,19 @@ the appropriate property.
 
 <dl class='compact'>
 
-<dt><code>-help</code>
+<dt><code>-h</code>, <code>--help</code>
 
 <dd>show help
 
-<dt><code>-V</code>
+<dt><code>-V</code>, <code>--version</code>
 
 <dd>show program version
 
 </dl>
 
-<p><strong>evilwm</strong> will also read options, one per line, from a file called <em>.evilwmrc</em> in the user's home directory.  Options listed in a
-configuration file should omit the leading dash.  Options specified on the
+<p><strong>evilwm</strong> will also read options, one per line, from a file
+called <em>.evilwmrc</em> in the user's home directory.  Options listed in a
+configuration file should omit the leading dash(es).  Options specified on the
 command line override those found in the configuration file.
 
 
@@ -239,7 +267,8 @@ down Alt and doing so anywhere in the window. The controls are:
 
 <dt><kbd>Escape</kbd>
 
-<dd>Delete current window.  Hold <kbd>Shift</kbd> as well to force kill a client.
+<dd>Delete current window.  Hold <kbd>Shift</kbd> as well to force kill a
+client.
 
 <dt><kbd>Insert</kbd>
 
@@ -270,11 +299,12 @@ current monitor.
 
 <dt><kbd>D</kbd>
 
-<dd>Toggle visible state of docks (e.g., pagers and launch bars).
+<dd>Toggle visible state of docks, eg pagers and launch bars.
 
 </dl>
 
-<p>If compiled with virtual desktop support, these functions are also available:
+<p>If compiled with virtual desktop support, these functions are also
+available:
 
 <dl>
 
@@ -306,7 +336,158 @@ you use application matching).
 <p>In addition to the above, <kbd>Alt</kbd>+<kbd>Tab</kbd> can be used to cycle
 through windows.
 
-<p>To make <strong>evilwm</strong> exit, kill the process.
+<p>To make <strong>evilwm</strong> reread its config, send a HUP signal to the
+process.  To make it quit, kill it, ie send a TERM signal.
+
+
+<h2 id='functions'>FUNCTIONS</h2>
+
+<p>The keyboard and mouse button controls can be configured with the
+<code>--bind</code> option to a number of built-in functions.  Typically, these
+functions respond to an additional set of flags that modify their behaviour.
+
+<dl class='compact'>
+
+<dt><code>delete</code>
+
+<dd>Delete a window.  This is the co-operative way of closing applications, as
+it sends the client a signal indicating that they should shut down.
+
+<dt><code>dock</code>
+
+<dd>When called with the <code>toggle</code> flag, toggles visibility of any
+window claiming to be a dock.
+
+<dt><code>fix</code>
+
+<dd>With the <code>toggle</code> flag, toggle whether a window is fixed
+(visible on all virtual desktops) or not.
+
+<dt><code>info</code>
+
+<dd>Shows extra information about the current window for as long as the key is
+held.
+
+<dt><code>kill</code>
+
+<dd>Kill a window.  A more forceful way of closing an application if it is not
+responding to delete requests.
+
+<dt><code>lower</code>
+
+<dd>Lower the current window.
+
+<dt><code>move</code>
+
+<dd>When bound to a button, moves a window with the mouse.
+
+<p>When bound to a key, if the <code>relative</code> flag is specified, moves a
+window in the direction indicated by other flags: <code>up</code>,
+<code>down</code>, <code>left</code> or <code>right</code>.  Without the
+<code>relative</code> flag, moves a window in the direction specified by other
+flag to the edge of the monitor.
+
+<dt><code>next</code>
+
+<dd>Cycle to the next window.
+
+<dt><code>resize</code>
+
+<dd>When bound to a button, resizes a window with the mouse.
+
+<p>When bound to a key, if the <code>relative</code> flag is specified,
+modifies the width or height of the window as indicated by other flags:
+<code>up</code> (reduce height), <code>down</code> (increase height),
+<code>left</code> (reduce width) or <code>right</code> (increase width).  If
+instead the <code>toggle</code> flag is specified, maximises along axes
+specified by other flags:  <code>horizontal</code>, <code>vertical</code> or
+both.
+
+<dt><code>spawn</code>
+
+<dd>Start a terminal.
+
+<dt><code>vdesk</code>
+
+<dd>With the <code>toggle</code> flag specified, switch to the previously
+visible vdesk.  With the <code>relative</code> flag set, either increase vdesk
+number (with <code>up</code> flag) or decrease it (with <code>down</code>
+flag).
+
+<p>If neither flag is specified, a numerical argument indicates which vdesk to
+switch to.
+
+</dl>
+
+
+<h2>DEFAULT BINDS</h2>
+
+<p>These are the default lists of modifiers, button and keyboard binds.  The
+built-in binds use the globally-configurable modifier combinations 'mask1',
+'mask2' and 'altmask', making a sweeping change to a different modifier
+combination easy.
+
+<p>Note that 'mod1' typically refers to the <kbd>Alt</kbd> key.
+
+<h3>Modifiers</h3>
+
+<pre>
+mask1 control+mod1
+mask2 mod1
+altmask shift
+</pre>
+
+<h3>Button binds</h3>
+
+<pre>
+bind button1=move,drag
+bind button2=resize,drag
+bind button3=lower
+</pre>
+
+<h3>Keyboard binds</h3>
+
+<pre>
+bind mask1+Return=spawn
+bind mask1+Escape=delete
+bind mask1+altmask+Escape=kill
+bind mask1+Insert=lower
+bind mask1+KP_Insert=lower
+bind mask1+i=info
+bind mask2+Tab=next
+
+bind mask1+h=move,relative+left
+bind mask1+j=move,relative+down
+bind mask1+k=move,relative+up
+bind mask1+l=move,relative+right
+bind mask1+y=move,top+left
+bind mask1+u=move,top+right
+bind mask1+b=move,bottom+left
+bind mask1+n=move,bottom+right
+
+bind mask1+altmask+h=resize,relative+left
+bind mask1+altmask+j=resize,relative+down
+bind mask1+altmask+k=resize,relative+up
+bind mask1+altmask+l=resize,relative+right
+
+bind mask1+equal=resize,toggle+v
+bind mask1+altmask+equal=resize,toggle+h
+bind mask1+x=resize,toggle+v+h
+
+bind mask1+d=dock,toggle
+bind mask1+f=fix,toggle
+bind mask1+1=vdesk,0
+bind mask1+2=vdesk,1
+bind mask1+3=vdesk,2
+bind mask1+4=vdesk,3
+bind mask1+5=vdesk,4
+bind mask1+6=vdesk,5
+bind mask1+7=vdesk,6
+bind mask1+8=vdesk,7
+bind mask1+Left=vdesk,relative+down
+bind mask1+Right=vdesk,relative+up
+bind mask1+a=vdesk,toggle
+</pre>
 
 
 <h2 id='files'>FILES</h2>
@@ -314,31 +495,26 @@ through windows.
 <p><em>$HOME/.evilwmrc</em>
 
 
-<h2 id='bugs'>BUGS</h2>
-
-<p>The author's idea of friendly may differ to that of many other people.
-
-
 <h2 id='licence'>LICENCE</h2>
 
-<p>Copyright (C) 1999-2021 Ciaran Anscomb &lt;evilwm@6809.org.uk&gt;
+<p>Copyright (C) 1999-2022 Ciaran Anscomb &lt;evilwm@6809.org.uk&gt;
 
 <p>This is free software.  You can do what you want to it, but if it breaks
-something, you get to pay for the counselling.  The code was originally
-based on aewm, so this is distributed under the same terms, which follow.
+something, you get to pay for the counselling.  The code was originally based
+on aewm, so this is distributed under the same terms, which follow.
 
 
 <h2>AEWM LICENCE</h2>
 
 <p>Copyright (c) 1998-2000 Decklin Foster.
 
-<p>THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS", WITHOUT ANY EXPRESS
-OR IMPLIED WARRANTIES OF ANY KIND. IN NO EVENT SHALL THE AUTHOR BE HELD
-LIABLE FOR ANY DAMAGES CONNECTED WITH THE USE OF THIS PROGRAM.
+<p>THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS", WITHOUT ANY EXPRESS OR
+IMPLIED WARRANTIES OF ANY KIND. IN NO EVENT SHALL THE AUTHOR BE HELD LIABLE FOR
+ANY DAMAGES CONNECTED WITH THE USE OF THIS PROGRAM.
 
-<p>You are granted permission to copy, publish, distribute, and/or sell
-copies of this program and any modified versions or derived works,
-provided that this copyright and notice are not removed or altered.
+<p>You are granted permission to copy, publish, distribute, and/or sell copies
+of this program and any modified versions or derived works, provided that this
+copyright and notice are not removed or altered.
 
 <p>Portions of the code were based on 9wm, which contains this license:
 

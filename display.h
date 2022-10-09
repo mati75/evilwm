@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2021 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // Display management.
@@ -119,5 +119,11 @@ void display_open(void);
 
 // Close display.
 void display_close(void);
+
+// Manage all relevant windows.
+void display_manage_clients(void);
+
+// Remove all windows from management.
+void display_unmanage_clients(void);
 
 #endif

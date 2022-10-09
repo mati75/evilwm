@@ -22,6 +22,10 @@ LC_CTYPE=en_GB.UTF-8
 LC_COLLATE=C
 export LANG LC_CTYPE LC_COLLATE
 
+# Tells chromium, et al. to query system proxy settings.
+XDG_CURRENT_DESKTOP=GNOME
+export XDG_CURRENT_DESKTOP
+
 # Ensure gpg-agent is running and relevant environment variables are present
 # for all child processes.
 eval $(/usr/bin/gpg-agent --daemon --sh)

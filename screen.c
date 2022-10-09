@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2021 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // Screen management.
@@ -21,11 +21,11 @@
 #include <X11/extensions/Xrandr.h>
 #endif
 
+#include "bind.h"
 #include "client.h"
 #include "display.h"
 #include "evilwm.h"
 #include "ewmh.h"
-#include "keymap.h"
 #include "list.h"
 #include "log.h"
 #include "screen.h"
@@ -73,7 +73,7 @@ void screen_init(struct screen *s) {
 	// Default to first virtual desktop.  TODO: consider checking the
 	// _NET_WM_DESKTOP property of the window with focus when we start to
 	// change this default?
-	s->vdesk = KEY_TO_VDESK(XK_1);
+	s->vdesk = 0;
 
 	// In case the visual for this screen uses a colourmap, ensure our
 	// border colours are in it.
@@ -106,30 +106,10 @@ void screen_init(struct screen *s) {
 	XChangeWindowAttributes(display.dpy, s->root, CWEventMask, &attr);
 
 	// Grab the various keyboard shortcuts
-	grab_keys_for_screen(s);
+	bind_grab_for_screen(s);
 
 	s->active = None;
 	s->docks_visible = 1;
-
-	// Scan all the windows on this screen
-	LOG_XENTER("XQueryTree(screen=%d)", i);
-	unsigned nwins;
-	Window dw1, dw2, *wins;
-	XQueryTree(display.dpy, s->root, &dw1, &dw2, &wins, &nwins);
-	LOG_XDEBUG("%d windows\n", nwins);
-	LOG_XLEAVE();
-
-	// Manage all relevant windows
-	for (unsigned j = 0; j < nwins; j++) {
-		XWindowAttributes winattr;
-		XGetWindowAttributes(display.dpy, wins[j], &winattr);
-		// Override redirect implies a pop-up that we should ignore.
-		// If map_state is not IsViewable, it shouldn't be shown right
-		// now, so don't try to manage it.
-		if (!winattr.override_redirect && winattr.map_state == IsViewable)
-			client_manage_new(wins[j], s);
-	}
-	XFree(wins);
 
 	Atom supported[] = {
 		X_ATOM(_NET_CLIENT_LIST),
@@ -204,7 +184,6 @@ void screen_init(struct screen *s) {
 			(unsigned char *)&pid, 1);
 
 	ewmh_set_screen_workarea(s);
-
 }
 
 void screen_deinit(struct screen *s) {
@@ -235,26 +214,31 @@ void screen_probe_monitors(struct screen *s) {
 		LOG_XENTER("XRRGetMonitors(screen=%d)", s->screen);
 		monitors = XRRGetMonitors(display.dpy, s->root, True, &nmonitors);
 		if (monitors) {
+			struct monitor *new_monitors = s->monitors;
 			if (nmonitors != s->nmonitors) {
 				// allocating in multiple of 4 should stop us
 				// having to reallocate at all in the most
 				// common uses
 				int n = (nmonitors | 3) + 1;
-				s->monitors = realloc(s->monitors, n * sizeof(struct monitor));
+				new_monitors = realloc(s->monitors, n * sizeof(struct monitor));
 			}
-			for (int i = 0; i < nmonitors; i++) {
-				LOG_XDEBUG("monitor %d: %dx%d+%d+%d\n", i, monitors[i].width, monitors[i].height, monitors[i].x, monitors[i].y);
-				s->monitors[i].x = monitors[i].x;
-				s->monitors[i].y = monitors[i].y;
-				s->monitors[i].width = monitors[i].width;
-				s->monitors[i].height = monitors[i].height;
-				s->monitors[i].area = monitors[i].width * monitors[i].height;
+			if (new_monitors) {
+				s->monitors = new_monitors;
+				for (int i = 0; i < nmonitors; i++) {
+					LOG_XDEBUG("monitor %d: %dx%d+%d+%d\n", i, monitors[i].width, monitors[i].height, monitors[i].x, monitors[i].y);
+					s->monitors[i].x = monitors[i].x;
+					s->monitors[i].y = monitors[i].y;
+					s->monitors[i].width = monitors[i].width;
+					s->monitors[i].height = monitors[i].height;
+					s->monitors[i].area = monitors[i].width * monitors[i].height;
+				}
+				s->nmonitors = nmonitors;
 			}
-			s->nmonitors = nmonitors;
 			LOG_XLEAVE();
 			XRRFreeMonitors(monitors);
 			return;
 		}
+		LOG_XLEAVE();
 	}
 #endif
 
@@ -451,62 +435,4 @@ struct screen *find_current_screen(void) {
 	// XQueryPointer is useful for getting the current pointer root
 	XQueryPointer(display.dpy, display.screens[0].root, &cur_root, &dw, &di, &di, &di, &di, &dui);
 	return find_screen(cur_root);
-}
-
-// Grab a key with the specified mask, and additionally with CapsLock or
-// NumLock on.
-
-static void grab_keysym(Window w, unsigned mask, KeySym keysym) {
-	KeyCode keycode = XKeysymToKeycode(display.dpy, keysym);
-	XGrabKey(display.dpy, keycode, mask, w, True,
-			GrabModeAsync, GrabModeAsync);
-	XGrabKey(display.dpy, keycode, mask|LockMask, w, True,
-			GrabModeAsync, GrabModeAsync);
-	if (numlockmask) {
-		XGrabKey(display.dpy, keycode, mask|numlockmask, w, True,
-				GrabModeAsync, GrabModeAsync);
-		XGrabKey(display.dpy, keycode, mask|numlockmask|LockMask, w, True,
-				GrabModeAsync, GrabModeAsync);
-	}
-}
-
-// List of keys to grab with Control+Alt (mask1):
-
-static KeySym keys_to_grab[] = {
-	KEY_FIX, KEY_PREVDESK, KEY_NEXTDESK, KEY_TOGGLEDESK,
-	XK_1, XK_2, XK_3, XK_4, XK_5, XK_6, XK_7, XK_8,
-	KEY_NEW, KEY_KILL,
-	KEY_TOPLEFT, KEY_TOPRIGHT, KEY_BOTTOMLEFT, KEY_BOTTOMRIGHT,
-	KEY_LEFT, KEY_RIGHT, KEY_DOWN, KEY_UP,
-	KEY_LOWER, KEY_ALTLOWER, KEY_INFO, KEY_MAXVERT, KEY_MAX,
-	KEY_DOCK_TOGGLE
-};
-#define NUM_GRABS (int)(sizeof(keys_to_grab) / sizeof(KeySym))
-
-// List of keys to grab with Control+Alt+Shift (mask1+altmask)
-
-static KeySym alt_keys_to_grab[] = {
-	KEY_KILL, KEY_LEFT, KEY_RIGHT, KEY_DOWN, KEY_UP,
-	KEY_MAXVERT,
-};
-#define NUM_ALT_GRABS (int)(sizeof(alt_keys_to_grab) / sizeof(KeySym))
-
-// Grab all the keys we're interested in for the specified screen.
-
-void grab_keys_for_screen(struct screen *s) {
-	// Release any previous grabs
-	XUngrabKey(display.dpy, AnyKey, AnyModifier, s->root);
-
-	// Grab with Control+Alt (mask1 option):
-	for (int i = 0; i < NUM_GRABS; i++) {
-		grab_keysym(s->root, grabmask1, keys_to_grab[i]);
-	}
-
-	// Grab with Control+Alt+Shift (mask1+altmask options):
-	for (int i = 0; i < NUM_ALT_GRABS; i++) {
-		grab_keysym(s->root, grabmask1 | altmask, alt_keys_to_grab[i]);
-	}
-
-	// Only one grab made with only Alt (mask2 option) pressed:
-	grab_keysym(s->root, grabmask2, KEY_NEXT);
 }

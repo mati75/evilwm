@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2021 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // Logging support functions
@@ -8,10 +8,14 @@
 #include "config.h"
 #endif
 
+#include <stdlib.h>
+#include <string.h>
+
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
+#include "display.h"
 #include "log.h"
 
 #if defined(DEBUG) || defined(XDEBUG)

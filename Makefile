@@ -1,6 +1,6 @@
 ############################################################################
 # evilwm - minimalist window manager for X11
-# Copyright (C) 1999-2021 Ciaran Anscomb <evilwm@6809.org.uk>
+# Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
 # see README for license and other details.
 
 # do not include any other makefiles above this line.
@@ -21,6 +21,9 @@ desktopfilesdir = $(datarootdir)/applications
 
 ############################################################################
 # Features
+
+# Note: some options to reconfigure keyboard mappings have been removed, as the
+# "-bind" option should allow that at runtime.
 
 # Uncomment to enable use of sqrt() function in monitor distance calculations.
 OPT_CPPFLAGS += -DHAVE_MATH_H
@@ -45,9 +48,6 @@ OPT_CPPFLAGS += -DSOLIDDRAG
 
 # Uncomment to move pointer around on certain actions.
 #OPT_CPPFLAGS += -DWARP_POINTER
-
-# Uncomment to use Ctrl+Alt+q instead of Ctrl+Alt+Escape.  Useful for Cygwin.
-#OPT_CPPFLAGS += -DKEY_KILL=XK_q
 
 # Uncomment to include whatever debugging messages I've left in this release.
 #OPT_CPPFLAGS += -DDEBUG   # miscellaneous debugging
@@ -112,7 +112,7 @@ INSTALL_PROGRAM = $(INSTALL) -m 0755
 ############################################################################
 # You shouldn't need to change anything beyond this point
 
-version = 1.3.1
+version = 1.4.0
 distdir = evilwm-$(version)
 
 # Generally shouldn't be overridden:
@@ -123,10 +123,10 @@ EVILWM_CFLAGS = -std=c99 $(CFLAGS) $(WARN)
 EVILWM_LDFLAGS = $(LDFLAGS)
 EVILWM_LDLIBS = -lX11 $(OPT_LDLIBS) $(LDLIBS)
 
-HEADERS = client.h config.h display.h events.h evilwm.h keymap.h list.h \
-	log.h screen.h util.h xalloc.h xconfig.h
-OBJS = client.o client_move.o client_new.o display.o events.o ewmh.o \
-	list.o log.o main.o screen.o util.o xconfig.o xmalloc.o
+HEADERS = bind.h client.h config.h display.h events.h evilwm.h func.h \
+	list.h log.h screen.h util.h xalloc.h xconfig.h
+OBJS = bind.o client.o client_move.o client_new.o display.o events.o ewmh.o \
+	func.o list.o log.o main.o screen.o util.o xconfig.o xmalloc.o
 
 .PHONY: all
 all: evilwm$(EXEEXT)
