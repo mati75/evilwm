@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2021 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // X11 event processing
@@ -11,7 +11,7 @@
 #include <X11/Xdefs.h>
 
 // Event loop will run until this flag is set
-extern int wm_exit;
+extern _Bool end_event_loop;
 
 // Flags that the client list should be scanned and marked clients removed.
 // Set by unhandled X errors and unmap requests.

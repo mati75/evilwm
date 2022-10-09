@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2021 Ciaran Anscomb
+ * Copyright (C) 1999-2022 Ciaran Anscomb
  * see README for license and other details. */
 
 // Configuration parsing.
@@ -81,9 +81,32 @@ static struct xconfig_option *find_option(struct xconfig_option *options,
 	return NULL;
 }
 
+static void unset_option(struct xconfig_option *option) {
+	switch (option->type) {
+	case XCONFIG_STRING:
+		if (*(char **)option->dest.s) {
+			free(*(char **)option->dest.s);
+			*(char **)option->dest.s = NULL;
+		}
+		break;
+	case XCONFIG_STR_LIST:
+		if (*(char ***)option->dest.sl) {
+			if ((*(char ***)option->dest.sl)[0]) {
+				free((*(char ***)option->dest.sl)[0]);
+			}
+			free(*(char ***)option->dest.sl);
+			*(char ***)option->dest.sl = NULL;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 // Store option value in memory according to its type
 
 static void set_option(struct xconfig_option *option, const char *arg) {
+	unset_option(option);
 	switch (option->type) {
 		case XCONFIG_BOOL:
 			*(int *)option->dest.i = 1;
@@ -95,18 +118,9 @@ static void set_option(struct xconfig_option *option, const char *arg) {
 			*(unsigned *)option->dest.u = strtoul(arg, NULL, 0);
 			break;
 		case XCONFIG_STRING:
-			if (*(char **)option->dest.s) {
-				free(*(char **)option->dest.s);
-			}
 			*(char **)option->dest.s = strdup(arg);
 			break;
 		case XCONFIG_STR_LIST:
-			if (*(char ***)option->dest.sl) {
-				for (int i = 0; (*(char ***)option->dest.sl)[i]; i++) {
-					free((*(char ***)option->dest.sl)[i]);
-				}
-				free(*(char ***)option->dest.sl);
-			}
 			*(char ***)option->dest.sl = split_string(arg);
 			break;
 		case XCONFIG_CALL_0:
@@ -223,5 +237,11 @@ void xconfig_set_option(struct xconfig_option *options, const char *optstr, cons
 	struct xconfig_option *opt = find_option(options, optstr);
 	if (opt) {
 		set_option(opt, arg);
+	}
+}
+
+void xconfig_free(struct xconfig_option *options) {
+	for (int i = 0; options[i].type != XCONFIG_END; i++) {
+		unset_option(&options[i]);
 	}
 }

@@ -26,6 +26,7 @@ done
 cat /dev/null > config.mk
 test -n "$host" && echo "CC = ${host}-gcc" >> config.mk
 test -n "$prefix" && echo "prefix = $prefix" >> config.mk
+test -n "$mandir" && echo "mandir = $mandir" >> config.mk
 test -n "$CFLAGS" && echo "CFLAGS = $CFLAGS" >> config.mk
 test -n "$LDFLAGS" && echo "LDFLAGS = $LDFLAGS" >> config.mk
 

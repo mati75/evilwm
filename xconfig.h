@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2021 Ciaran Anscomb
+ * Copyright (C) 1999-2022 Ciaran Anscomb
  * see README for license and other details. */
 
 // Configuration parsing.
@@ -53,5 +53,8 @@ enum xconfig_result xconfig_parse_cli(struct xconfig_option *options,
 				      int argc, char **argv, int *argn);
 
 void xconfig_set_option(struct xconfig_option *options, const char *optstr, const char *arg);
+
+// Free all allocated strings pointed to by options
+void xconfig_free(struct xconfig_option *options);
 
 #endif

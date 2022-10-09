@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2021 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // Display management
@@ -188,10 +188,6 @@ void display_open(void) {
 // moved windows.
 
 void display_close(void) {
-
-	while (clients_stacking_order)
-		remove_client(clients_stacking_order->data);
-
 	XSetInputFocus(display.dpy, PointerRoot, RevertToPointerRoot, CurrentTime);
 
 	if (display.font)
@@ -208,4 +204,34 @@ void display_close(void) {
 
 	XCloseDisplay(display.dpy);
 	display.dpy = 0;
+}
+
+void display_manage_clients(void) {
+	for (int i = 0; i < display.nscreens; i++) {
+		struct screen *s = &display.screens[i];
+
+		LOG_XENTER("XQueryTree(screen=%d)", i);
+		unsigned nwins;
+		Window dw1, dw2, *wins;
+		XQueryTree(display.dpy, s->root, &dw1, &dw2, &wins, &nwins);
+		LOG_XDEBUG("%u windows\n", nwins);
+		LOG_XLEAVE();
+
+		// Manage all relevant windows
+		for (unsigned j = 0; j < nwins; j++) {
+			XWindowAttributes winattr;
+			XGetWindowAttributes(display.dpy, wins[j], &winattr);
+			// Override redirect implies a pop-up that we should ignore.
+			// If map_state is not IsViewable, it shouldn't be shown right
+			// now, so don't try to manage it.
+			if (!winattr.override_redirect && winattr.map_state == IsViewable)
+				client_manage_new(wins[j], s);
+		}
+		XFree(wins);
+	}
+}
+
+void display_unmanage_clients(void) {
+	while (clients_stacking_order)
+		remove_client(clients_stacking_order->data);
 }

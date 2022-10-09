@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2021 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // Default option values
@@ -57,9 +57,6 @@ extern struct options option;
 #endif
 
 extern unsigned numlockmask;
-extern unsigned grabmask1;
-extern unsigned grabmask2;
-extern unsigned altmask;
 
 // Application matching
 

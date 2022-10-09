@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2021 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 #ifndef EVILWM_UTIL_H_
@@ -54,6 +54,9 @@ Bool get_pointer_root_xy(Window w, int *x, int *y); // Wraps XQueryPointer()
 
 // Wraps XGetWindowProperty()
 void *get_property(Window w, Atom property, Atom req_type, unsigned long *nitems_return);
+
+// Determine the normal border size for a window.
+int window_normal_border(Window w);
 
 // Alternative to XNextEvent().  Unlike XNextEvent, if a signal arrives,
 // interruptibleXNextEvent will return zero.

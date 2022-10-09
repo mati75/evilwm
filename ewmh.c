@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2021 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // Extended Window Manager Hints
@@ -53,10 +53,12 @@ void ewmh_set_screen_workarea(struct screen *s) {
 void ewmh_set_net_client_list(struct screen *s) {
 	Window *windows = alloc_window_array();
 	int i = 0;
-	for (struct list *iter = clients_mapping_order; iter; iter = iter->next) {
-		struct client *c = iter->data;
-		if (c->screen == s) {
-			windows[i++] = c->window;
+	if (windows) {
+		for (struct list *iter = clients_mapping_order; iter; iter = iter->next) {
+			struct client *c = iter->data;
+			if (c->screen == s) {
+				windows[i++] = c->window;
+			}
 		}
 	}
 	XChangeProperty(display.dpy, s->root, X_ATOM(_NET_CLIENT_LIST),
@@ -70,10 +72,12 @@ void ewmh_set_net_client_list(struct screen *s) {
 void ewmh_set_net_client_list_stacking(struct screen *s) {
 	Window *windows = alloc_window_array();
 	int i = 0;
-	for (struct list *iter = clients_stacking_order; iter; iter = iter->next) {
-		struct client *c = iter->data;
-		if (c->screen == s) {
-			windows[i++] = c->window;
+	if (windows) {
+		for (struct list *iter = clients_stacking_order; iter; iter = iter->next) {
+			struct client *c = iter->data;
+			if (c->screen == s) {
+				windows[i++] = c->window;
+			}
 		}
 	}
 	XChangeProperty(display.dpy, s->root, X_ATOM(_NET_CLIENT_LIST_STACKING),
@@ -142,7 +146,7 @@ void ewmh_set_net_wm_desktop(struct client *c) {
 			(unsigned char *)&vdesk, 1);
 }
 
-// Check _NET_WM_WINDOW_TYPE property and built a bitmask of EWMH_WINDOW_TYPE_*
+// Check _NET_WM_WINDOW_TYPE property and build a bitmask of EWMH_WINDOW_TYPE_*
 
 unsigned ewmh_get_net_wm_window_type(Window w) {
 	Atom *aprop;

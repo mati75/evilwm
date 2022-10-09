@@ -1,9 +1,8 @@
 [Desktop Entry]
 Type=Application
-Encoding=UTF-8
 Name=evilwm
 Exec=evilwm
-NoDisplay=true
+NoDisplay=false
 X-GNOME-WMName=evilwm
 # evilwm doesn't talk XSMP yet, so don't start in the WindowManager phase:
 X-GNOME-Autostart-Phase=Applications
