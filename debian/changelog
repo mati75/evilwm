@@ -1,9 +1,9 @@
-evilwm (1.4.0-1) UNRELEASED; urgency=medium
+evilwm (1.4.0-1) unstable; urgency=medium
 
   * New upstream release:
     + Removed patches included upstream and refreshed rest. 
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 09 Oct 2022 21:05:53 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Sat, 22 Oct 2022 16:47:28 +0200
 
 evilwm (1.3.1-1) unstable; urgency=medium
 
