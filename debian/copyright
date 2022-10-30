@@ -2,6 +2,7 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: evilwm
 Source: http://www.6809.org.uk/evilwm/
 Copyright: 1999-2015 Ciaran Anscomb <evilwm@6809.org.uk>
+Upstream-Contact: https://www.6809.org.uk/ciaran/
 
 Files: *
 Copyright: 1999-2015 Ciaran Anscomb <evilwm@6809.org.uk>
