@@ -36,6 +36,7 @@ void func_info(void *, XEvent *, unsigned);
 void func_lower(void *, XEvent *, unsigned);
 void func_move(void *, XEvent *, unsigned);
 void func_next(void *, XEvent *, unsigned);
+void func_raise(void *, XEvent *, unsigned);
 void func_resize(void *, XEvent *, unsigned);
 void func_spawn(void *, XEvent *, unsigned);
 void func_vdesk(void *, XEvent *, unsigned);

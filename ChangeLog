@@ -1,3 +1,12 @@
+Version 1.4.2, Tue Nov  8 2022
+
+  * Ignore NumLock correctly when processing events [Kacper Gutowski]
+
+Version 1.4.1, Wed Nov  2 2022
+
+  * Add "raise" function to complement "lower" [Juan Pedro Vallejo]
+  * Allow '=' in option arguments, needed for -bind [Burkhard Kleemeier]
+
 Version 1.4.0, Tue Sep 27 2022
 
   * Send more accurate response to _NET_REQUEST_FRAME_EXTENTS.

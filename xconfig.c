@@ -14,6 +14,7 @@
 #include <string.h>
 
 #include "log.h"
+#include "xalloc.h"
 #include "xconfig.h"
 
 // Break a space-separated string into an array of strings.
@@ -118,7 +119,7 @@ static void set_option(struct xconfig_option *option, const char *arg) {
 			*(unsigned *)option->dest.u = strtoul(arg, NULL, 0);
 			break;
 		case XCONFIG_STRING:
-			*(char **)option->dest.s = strdup(arg);
+			*(char **)option->dest.s = xstrdup(arg);
 			break;
 		case XCONFIG_STR_LIST:
 			*(char ***)option->dest.sl = split_string(arg);
@@ -134,46 +135,59 @@ static void set_option(struct xconfig_option *option, const char *arg) {
 	}
 }
 
+void xconfig_parse_line(struct xconfig_option *options, const char *line) {
+	// skip leading spaces
+	while (isspace((int)*line))
+		line++;
+
+	// end of line or comment?
+	if (*line == 0 || *line == '#')
+		return;
+
+	// from here on, work on a copy of the string
+	char *linedup = xstrdup(line);
+
+	// whitespace separates option from arguments
+	char *optstr = strtok(linedup, "\t\n\v\f\r ");
+	if (optstr == NULL) {
+		goto done;
+	}
+
+	struct xconfig_option *opt = find_option(options, optstr);
+	if (opt == NULL) {
+		LOG_INFO("Ignoring unknown option `%s'\n", optstr);
+		goto done;
+	}
+
+	char *arg;
+	if (opt->type == XCONFIG_STR_LIST) {
+		// special case: spaces here mean something
+		arg = strtok(NULL, "\n\v\f\r");
+		while (isspace(*arg)) {
+			arg++;
+		}
+	} else {
+		arg = strtok(NULL, "\t\n\v\f\r ");
+	}
+
+	set_option(opt, arg ? arg : "");
+done:
+	free(linedup);
+	return;
+}
+
 // Simple parser: one directive per line, "option argument"
 
 enum xconfig_result xconfig_parse_file(struct xconfig_option *options,
 		const char *filename) {
 	char buf[256];
-	char *line, *optstr, *arg;
+	char *line;
 	FILE *cfg;
 	cfg = fopen(filename, "r");
 	if (cfg == NULL) return XCONFIG_FILE_ERROR;
 
 	while ((line = fgets(buf, sizeof(buf), cfg))) {
-		// skip leading spaces
-		while (isspace((int)*line))
-			line++;
-
-		// end of line or comment?
-		if (*line == 0 || *line == '#')
-			continue;
-
-		// whitespace and '=' separate option from arguments
-		optstr = strtok(line, "\t\n\v\f\r =");
-		if (optstr == NULL)
-			continue;
-
-		struct xconfig_option *opt = find_option(options, optstr);
-		if (opt == NULL) {
-			LOG_INFO("Ignoring unknown option `%s'\n", optstr);
-			continue;
-		}
-
-		if (opt->type == XCONFIG_STR_LIST) {
-			// special case: spaces here mean something
-			arg = strtok(NULL, "\n\v\f\r");
-			while (isspace(*arg) || *arg == '=') {
-				arg++;
-			}
-		} else {
-			arg = strtok(NULL, "\t\n\v\f\r =");
-		}
-		set_option(opt, arg);
+		xconfig_parse_line(options, line);
 	}
 	fclose(cfg);
 	return XCONFIG_OK;
@@ -231,13 +245,6 @@ enum xconfig_result xconfig_parse_cli(struct xconfig_option *options,
 		*argn = _argn;
 	}
 	return XCONFIG_OK;
-}
-
-void xconfig_set_option(struct xconfig_option *options, const char *optstr, const char *arg) {
-	struct xconfig_option *opt = find_option(options, optstr);
-	if (opt) {
-		set_option(opt, arg);
-	}
 }
 
 void xconfig_free(struct xconfig_option *options) {

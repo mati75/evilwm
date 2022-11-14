@@ -76,9 +76,9 @@ void func_info(void *sptr, XEvent *e, unsigned flags) {
 }
 
 void func_lower(void *sptr, XEvent *e, unsigned flags) {
-	if (!(flags & FL_CLIENT))
-		return;
 	struct client *c = sptr;
+	if (!(flags & FL_CLIENT) || !c)
+		return;
 	(void)e;
 	client_lower(c);
 }
@@ -146,6 +146,14 @@ void func_next(void *sptr, XEvent *e, unsigned flags) {
 		XUngrabKeyboard(display.dpy, CurrentTime);
 	}
 	clients_tab_order = list_to_head(clients_tab_order, current);
+}
+
+void func_raise(void *sptr, XEvent *e, unsigned flags) {
+	struct client *c = sptr;
+	if (!(flags & FL_CLIENT) || !c)
+		return;
+	(void)e;
+	client_raise(c);
 }
 
 void func_resize(void *sptr, XEvent *e, unsigned flags) {
