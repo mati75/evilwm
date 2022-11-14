@@ -97,6 +97,7 @@ static struct function_def name_to_func[] = {
 	{ "lower",  func_lower,     FL_CLIENT },
 	{ "move",   func_move,      FL_CLIENT },
 	{ "next",   func_next,      0 },
+	{ "raise",  func_raise,     FL_CLIENT },
 	{ "resize", func_resize,    FL_CLIENT },
 	{ "spawn",  func_spawn,     0 },
 	{ "vdesk",  func_vdesk,     FL_SCREEN },
@@ -453,7 +454,7 @@ void bind_handle_key(XKeyEvent *e) {
 
 	for (struct list *l = controls; l; l = l->next) {
 		struct bind *bind = l->data;
-		if (bind->type == KeyPress && key == bind->control.key && (e->state & KEY_STATE_MASK) == bind->state) {
+		if (bind->type == KeyPress && key == bind->control.key && (e->state & KEY_STATE_MASK & ~numlockmask) == (bind->state & ~numlockmask)) {
 			void *sptr = NULL;
 			if (bind->flags & FL_CLIENT) {
 				sptr = current;
@@ -475,7 +476,7 @@ void bind_handle_key(XKeyEvent *e) {
 void bind_handle_button(XButtonEvent *e) {
 	for (struct list *l = controls; l; l = l->next) {
 		struct bind *bind = l->data;
-		if (bind->type == ButtonPress && e->button == bind->control.button && (e->state & BUTTON_STATE_MASK) == bind->state) {
+		if (bind->type == ButtonPress && e->button == bind->control.button && (e->state & BUTTON_STATE_MASK & ~numlockmask) == (bind->state & ~numlockmask)) {
 			void *sptr = NULL;
 			if (bind->flags & FL_CLIENT) {
 				sptr = find_client(e->window);

@@ -81,7 +81,7 @@
 .  pdfinfo /Author Ciaran Anscomb
 .\}
 .
-.TH "evilwm" "1" "September 2022" "evilwm-1.4"
+.TH "evilwm" "1" "October 2022" "evilwm-1.4"
 .hy 0
 .nh
 .H1 NAME
@@ -259,6 +259,10 @@ When bound to a key, if the \f(CBrelative\fR flag is specified, moves a window i
 \f(CBnext\fR
 Cycle to the next window.
 .TP
+\f(CBraise\fR
+.PP
+Raises the current window.
+.TP
 \f(CBresize\fR
 When bound to a button, resizes a window with the mouse.
 .IP
@@ -286,8 +290,8 @@ altmask\ shift
 .H2 Button binds
 .IP
 .EX
-bind\ button1=move,drag
-bind\ button2=resize,drag
+bind\ button1=move
+bind\ button2=resize
 bind\ button3=lower
 .EE
 .H2 Keyboard binds

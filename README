@@ -219,6 +219,10 @@ FUNCTIONS
 
        next   Cycle to the next window.
 
+       raise
+
+       Raises the current window.
+
        resize When bound to a button, resizes a window with the mouse.
 
               When bound to a key, if the relative flag is specified, modifies
@@ -251,8 +255,8 @@ DEFAULT BINDS
               altmask shift
 
    Button binds
-              bind button1=move,drag
-              bind button2=resize,drag
+              bind button1=move
+              bind button2=resize
               bind button3=lower
 
    Keyboard binds
@@ -335,4 +339,4 @@ SEE ALSO
 
 
 
-evilwm-1.4                      September 2022                       evilwm(1)
+evilwm-1.4                       October 2022                        evilwm(1)

@@ -138,6 +138,7 @@ void display_open(void) {
 
 	// Find out which modifier is NumLock - for every grab, we need to also
 	// grab the combination where this is set.
+	numlockmask = 0;
 	XModifierKeymap *modmap = XGetModifierMapping(display.dpy);
 	for (unsigned i = 0; i < 8; i++) {
 		for (unsigned j = 0; j < (unsigned)modmap->max_keypermod; j++) {

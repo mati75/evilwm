@@ -46,13 +46,13 @@ struct xconfig_option {
 	} dest;
 };
 
+void xconfig_parse_line(struct xconfig_option *options, const char *line);
+
 enum xconfig_result xconfig_parse_file(struct xconfig_option *options,
 				       const char *filename);
 
 enum xconfig_result xconfig_parse_cli(struct xconfig_option *options,
 				      int argc, char **argv, int *argn);
-
-void xconfig_set_option(struct xconfig_option *options, const char *optstr, const char *arg);
 
 // Free all allocated strings pointed to by options
 void xconfig_free(struct xconfig_option *options);

@@ -70,7 +70,7 @@ table td, table th { border-left: solid thin; border-right: solid thin; border-b
 
 <body>
 
-<h1 man:date='September 2022' man:section='1' man:dist='evilwm-1.4' pdf:title="evilwm 1.4" pdf:author="Ciaran Anscomb">evilwm</h1>
+<h1 man:date='October 2022' man:section='1' man:dist='evilwm-1.4' pdf:title="evilwm 1.4" pdf:author="Ciaran Anscomb">evilwm</h1>
 
 
 <h2 id='name'>NAME</h2>
@@ -391,6 +391,10 @@ flag to the edge of the monitor.
 
 <dd>Cycle to the next window.
 
+<dt><code>raise</code>
+
+<p>Raises the current window.
+
 <dt><code>resize</code>
 
 <dd>When bound to a button, resizes a window with the mouse.
@@ -440,8 +444,8 @@ altmask shift
 <h3>Button binds</h3>
 
 <pre>
-bind button1=move,drag
-bind button2=resize,drag
+bind button1=move
+bind button2=resize
 bind button3=lower
 </pre>
 

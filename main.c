@@ -134,6 +134,18 @@ static void helptext(void) {
 	);
 }
 
+static const char *default_options[] = {
+	"display",
+	"term " DEF_TERM,
+	"fn " DEF_FONT,
+	"fg " DEF_FG,
+	"bg " DEF_BG,
+	"bw " xstr(DEF_BW),
+	"fc " DEF_FC,
+	"numvdesks 8",
+};
+#define NUM_DEFAULT_OPTIONS (sizeof(default_options)/sizeof(default_options[0]))
+
 int main(int argc, char *argv[]) {
 	struct sigaction act;
 	int argn = 1, ret;
@@ -150,25 +162,10 @@ int main(int argc, char *argv[]) {
 	wm_exit = 0;
 	while (!wm_exit) {
 
-		option = (struct options) {
-			.bw = DEF_BW,
-
-			.vdesks = 8,
-			.snap = 0,
-			.wholescreen = 0,
-
-#ifdef SOLIDDRAG
-			.no_solid_drag = 0,
-#endif
-		};
-
 		// Default options
-		xconfig_set_option(evilwm_options, "display", "");
-		xconfig_set_option(evilwm_options, "fn", DEF_FONT);
-		xconfig_set_option(evilwm_options, "fg", DEF_FG);
-		xconfig_set_option(evilwm_options, "bg", DEF_BG);
-		xconfig_set_option(evilwm_options, "fc", DEF_FC);
-		xconfig_set_option(evilwm_options, "term", DEF_TERM);
+		option = (struct options){0};
+		for (unsigned i = 0; i < NUM_DEFAULT_OPTIONS; i++)
+			xconfig_parse_line(evilwm_options, default_options[i]);
 
 		// Read configuration file
 		const char *home = getenv("HOME");
