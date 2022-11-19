@@ -1,4 +1,4 @@
-evilwm (1.4.2-1) UNRELEASED; urgency=medium
+evilwm (1.4.2-1) unstable; urgency=medium
 
   [ Debian Janitor ]
   * Trim trailing whitespace.
@@ -9,8 +9,9 @@ evilwm (1.4.2-1) UNRELEASED; urgency=medium
 
   [ Mateusz Łukasik ]
   * New upstream release. (Closes: #1023516)
+  * Update debian/source/lintian-overrides.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Mon, 14 Nov 2022 21:53:49 +0100
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 18 Nov 2022 21:13:27 +0100
 
 evilwm (1.4.0-1) unstable; urgency=medium
 
