@@ -1,3 +1,7 @@
+Version 1.4.3, Sat Mar  9 2024
+
+  * Force dock windows to have _NET_WM_STATE_FOCUSED
+
 Version 1.4.2, Tue Nov  8 2022
 
   * Ignore NumLock correctly when processing events [Kacper Gutowski]
@@ -350,6 +354,7 @@ Version 0.3.8, Sun Feb  4 2001
   * With minimal options, evilwm now comes out to <15K under Linux :)
 
 Version 0.3.7, Mon Jan 15 2001
+
   * -bw option to change border width.
   * Also changed all other options to single - due to making more sense
   * Stop remembering the name of the window.
@@ -375,6 +380,29 @@ Version 0.3.4, Tue Oct 31 2000
   * Now gets the border the right size when a window resizes itself.
   * First window gets an active border now.
 
-Version 0.3.3
+Version 0.3
 
-  * No logs back this far.
+  * ChangeLog information missing, but 0.3 appears to be when evilwm switched
+    to being based on aewm.
+
+Version 0.2.5, Sun 11 Jul 1999
+
+  * Control+Alt+cursors to move window [Damion Yates]
+  * Control+Alt+Home/End/PgUp/PgDn moves window to corners.
+  * Control+Alt+Return spawns new xterm.
+  * Control+Alt+Escape deletes current window (hold Shift to Kill).
+  * Alt-Tab cycles through windows.
+
+Version 0.2.4, Thu  8 Jul 1999
+
+  * Cast the last warnings away.
+
+Version 0.2.3, Thu  8 Jul 1999
+
+  * Changed the hidden-window label truncation to stop after 42 characters,
+    rather than look for a ':'.  I don't mind longish labels.
+  * Focus follows mouse.
+  * Added Mod1-Button1 to move windows (and raise them).
+  * Mod1-Button3 lowers window.
+  * Automatic window placement!  Pretty thick, but it's less annoying than
+    having to place them yourself.

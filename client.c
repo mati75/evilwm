@@ -232,6 +232,7 @@ void client_show(struct client *c) {
 // Raise client.  Maintains clients_stacking_order list and EWMH hints.
 
 void client_raise(struct client *c) {
+	LOG_XDEBUG("XRaiseWindow(window=%lx,parent=%lx)\n", (unsigned long)c->window, (unsigned long)c->parent);
 	XRaiseWindow(display.dpy, c->parent);
 	clients_stacking_order = list_to_tail(clients_stacking_order, c);
 	ewmh_set_net_client_list_stacking(c->screen);
@@ -240,6 +241,7 @@ void client_raise(struct client *c) {
 // Lower client.  Maintains clients_stacking_order list and EWMH hints.
 
 void client_lower(struct client *c) {
+	LOG_XDEBUG("XLowerWindow(window=%lx,parent=%lx)\n", (unsigned long)c->window, (unsigned long)c->parent);
 	XLowerWindow(display.dpy, c->parent);
 	clients_stacking_order = list_to_head(clients_stacking_order, c);
 	ewmh_set_net_client_list_stacking(c->screen);
