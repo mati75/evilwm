@@ -132,6 +132,20 @@ static void do_window_changes(int value_mask, XWindowChanges *wc, struct client 
 	LOG_XLEAVE();
 }
 
+static void handle_configure_notify(XConfigureEvent *e) {
+	struct client *c = find_client(e->window);
+	if (!c) {
+		LOG_XDEBUG("handle_configure_notify() on unmanaged window\n");
+		return;
+	}
+	LOG_XENTER("handle_configure_notify(window=%lx, parent=%lx)", c->window, c->parent);
+	LOG_XDEBUG("x,y w,h=%d,%d %d,%d\n", e->x, e->y, e->width, e->height);
+	LOG_XDEBUG("bw=%d\n", e->border_width);
+	LOG_XDEBUG("above=%lx\n", (unsigned long)e->above);
+	LOG_XDEBUG("override_redirect=%d\n", (int)e->override_redirect);
+	LOG_XLEAVE();
+}
+
 static void handle_configure_request(XConfigureRequestEvent *e) {
 	struct client *c = find_client(e->window);
 
@@ -408,6 +422,9 @@ void event_main_loop(void) {
 				break;
 			case ButtonPress:
 				bind_handle_button(&ev.xevent.xbutton);
+				break;
+			case ConfigureNotify:
+				handle_configure_notify(&ev.xevent.xconfigure);
 				break;
 			case ConfigureRequest:
 				handle_configure_request(&ev.xevent.xconfigurerequest);
