@@ -1,10 +1,11 @@
-evilwm (1.4.3-1) UNRELEASED; urgency=medium
+evilwm (1.4.3-1) unstable; urgency=medium
 
   * New upstream release.
   * debian/source/lintian-overrides: Rename tag.
   * Bump standards version to 4.6.2.
+  * Add patch for drop pdf customization from manpage.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 15 Mar 2024 21:04:26 +0100
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 20 Mar 2024 21:05:56 +0100
 
 evilwm (1.4.2-1) unstable; urgency=medium
 
