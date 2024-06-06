@@ -7,5 +7,3 @@ evilwm
 .*.swp
 .*.swo
 .DS_Store
-## debian rules often present, but separate
-debian/
