@@ -1,8 +1,7 @@
-Description: Drop pdf customization from manpage
+Description: Removed pdf references and fixed manpage according to lintian
 Author: Mateusz Łukasik <mati75@linuxmint.pl>
-
 Origin: other
-Forwarded: no
+Forwarded: not-needed
 
 --- a/evilwm.1
 +++ b/evilwm.1
@@ -86,11 +85,11 @@ Forwarded: no
 -.ie \\n(mP \{\
 -.  nr PDFOUTLINE.FOLDLEVEL 3
 -.  pdfview /PageMode /UseOutlines
--.  pdfinfo /Title evilwm 1.4
+-.  pdfinfo /Title evilwm 1.5
 -.  pdfinfo /Author Ciaran Anscomb
 -.\}
 -.
- .TH "evilwm" "1" "October 2022" "evilwm-1.4"
+ .TH "evilwm" "1" "December 2025" "evilwm-1.5"
  .hy 0
  .nh
 -.H1 NAME
@@ -111,7 +110,7 @@ Forwarded: no
  .TP
  \f(CB\-\-display\fR \fIdisplay\fR
  specifies the X display to run on. Usually this can be inferred from the \f(CBDISPLAY\fR environment variable.
-@@ -126,20 +43,20 @@ number of virtual desktops to provide. D
+@@ -126,20 +43,20 @@ virtual desktop layout, defaulting to \[
  \f(CB\-\-nosoliddrag\fR
  draw a window outline while moving or resizing.
  .TP
@@ -139,7 +138,7 @@ Forwarded: no
  .TP
  \f(CB\-\-app\fR \fIname/class\fR
  match an application by instance name and class (for help in finding these, use the \fIxprop\fR tool to extract the \fIWM_CLASS\fR property).
-@@ -165,7 +82,7 @@ show help
+@@ -171,7 +88,7 @@ show help
  show program version
  .PP
  \fBevilwm\fR will also read options, one per line, from a file called \fI.evilwmrc\fR in the user\[aq]s home directory. Options listed in a configuration file should omit the leading dash(es). Options specified on the command line override those found in the configuration file.
@@ -148,7 +147,7 @@ Forwarded: no
  .PP
  In \fBevilwm\fR, the focus follows the mouse pointer, and focus is not lost if you stray onto the root window. The current window border is shaded gold (unless it is fixed, in which case blue), with other windows left as a dark grey.
  .PP
-@@ -229,7 +146,7 @@ Switch to the previously selected virtua
+@@ -241,7 +158,7 @@ Switch to the previously selected virtua
  In addition to the above, Alt+Tab can be used to cycle through windows.
  .PP
  To make \fBevilwm\fR reread its config, send a HUP signal to the process. To make it quit, kill it, ie send a TERM signal.
@@ -157,8 +156,8 @@ Forwarded: no
  .PP
  The keyboard and mouse button controls can be configured with the \f(CB\-\-bind\fR option to a number of built-in functions. Typically, these functions respond to an additional set of flags that modify their behaviour.
  .TP
-@@ -275,26 +192,26 @@ Start a terminal.
- With the \f(CBtoggle\fR flag specified, switch to the previously visible vdesk. With the \f(CBrelative\fR flag set, either increase vdesk number (with \f(CBup\fR flag) or decrease it (with \f(CBdown\fR flag).
+@@ -287,26 +204,26 @@ Start a terminal.
+ With the \f(CBtoggle\fR flag specified, switch to the previously visible vdesk. With the \f(CBrelative\fR flag set, move within the virtual desktop layout according to the \f(CBleft\fR, \f(CBright\fR, \f(CBup\fR or \f(CBdown\fR flags.
  .IP
  If neither flag is specified, a numerical argument indicates which vdesk to switch to.
 -.H1 DEFAULT BINDS
@@ -168,7 +167,7 @@ Forwarded: no
  .PP
  Note that \[aq]mod1\[aq] typically refers to the Alt key.
 -.H2 Modifiers
-+.SS Modifiers
++.SH Modifiers
  .IP
  .EX
  mask1\ control+mod1
@@ -176,7 +175,7 @@ Forwarded: no
  altmask\ shift
  .EE
 -.H2 Button binds
-+.SS Button binds
++.SH Button binds
  .IP
  .EX
  bind\ button1=move
@@ -184,12 +183,12 @@ Forwarded: no
  bind\ button3=lower
  .EE
 -.H2 Keyboard binds
-+.SS Keyboard binds
++.SH Keyboard binds
  .IP
  .EX
  bind\ mask1+Return=spawn
-@@ -333,15 +250,15 @@ bind\ mask1+Left=vdesk,relative+down
- bind\ mask1+Right=vdesk,relative+up
+@@ -347,15 +264,15 @@ bind\ mask1+Up=vdesk,relative+up
+ bind\ mask1+Down=vdesk,relative+down
  bind\ mask1+a=vdesk,toggle
  .EE
 -.H1 FILES
@@ -199,7 +198,7 @@ Forwarded: no
 -.H1 LICENCE
 +.SH LICENCE
  .PP
- Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
+ Copyright (C) 1999-2025 Ciaran Anscomb <evilwm@6809.org.uk>
  .PP
  This is free software. You can do what you want to it, but if it breaks something, you get to pay for the counselling. The code was originally based on aewm, so this is distributed under the same terms, which follow.
 -.H1 AEWM LICENCE
@@ -207,7 +206,7 @@ Forwarded: no
  .PP
  Copyright (c) 1998-2000 Decklin Foster.
  .PP
-@@ -366,6 +283,6 @@ provided\ that:
+@@ -380,6 +297,6 @@ provided\ that:
  \ \ \ \ \ \ or\ shortcomings\ in\ the\ software,\ or\ damages\ caused\ by\ it.
  There\ is\ no\ warranty\ for\ this\ software.\ \ Have\ a\ nice\ day.
  .EE

@@ -1,3 +1,11 @@
+evilwm (1.5-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+  * Refresh patches.
+  * Update d/watch to version 5.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 19 Feb 2026 10:43:46 +0100
+
 evilwm (1.4.3-1) unstable; urgency=medium
 
   * New upstream release.
