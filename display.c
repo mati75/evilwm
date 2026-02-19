@@ -65,6 +65,7 @@ static const char *atom_list[] = {
 	"_NET_ACTIVE_WINDOW",
 	"_NET_WORKAREA",
 	"_NET_SUPPORTING_WM_CHECK",
+	"_NET_WM_FULL_PLACEMENT",
 
 	// EWMH: Other Root Window Messages
 	"_NET_CLOSE_WINDOW",

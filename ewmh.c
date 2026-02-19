@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2025 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // Extended Window Manager Hints
@@ -16,6 +16,7 @@
 
 #include "client.h"
 #include "display.h"
+#include "evilwm.h"
 #include "ewmh.h"
 #include "list.h"
 #include "log.h"
@@ -32,19 +33,37 @@ static Window *alloc_window_array(void);
 // Update various properties that reflect the screen geometry.
 
 void ewmh_set_screen_workarea(struct screen *s) {
-	unsigned long workarea[4] = {
-		0, 0,
-		DisplayWidth(display.dpy, s->screen), DisplayHeight(display.dpy, s->screen)
-	};
+	// All our virtual desktops are the same, but we need to report a
+	// workarea for each one:
+	int ndesktops = option.vdeskrows * option.vdeskcolumns;
+	unsigned long *viewport = malloc(2 * ndesktops * sizeof(*viewport));
+	if (!viewport) {
+		return;
+	}
+	unsigned long *workarea = malloc(4 * ndesktops * sizeof(*workarea));
+	if (!workarea) {
+		free(viewport);
+		return;
+	}
+	for (int i = 0; i < ndesktops; i++) {
+		viewport[i*2+0] = 0;
+		viewport[i*2+1] = 0;
+		workarea[i*4+0] = 0;
+		workarea[i*4+1] = 0;
+		workarea[i*4+2] = DisplayWidth(display.dpy, s->screen);
+		workarea[i*4+3] = DisplayHeight(display.dpy, s->screen);
+	}
 	XChangeProperty(display.dpy, s->root, X_ATOM(_NET_DESKTOP_GEOMETRY),
 			XA_CARDINAL, 32, PropModeReplace,
 			(unsigned char *)&workarea[2], 2);
 	XChangeProperty(display.dpy, s->root, X_ATOM(_NET_DESKTOP_VIEWPORT),
 			XA_CARDINAL, 32, PropModeReplace,
-			(unsigned char *)&workarea[0], 2);
+			(unsigned char *)viewport, 2 * ndesktops);
 	XChangeProperty(display.dpy, s->root, X_ATOM(_NET_WORKAREA),
 			XA_CARDINAL, 32, PropModeReplace,
-			(unsigned char *)&workarea, 4);
+			(unsigned char *)workarea, 4 * ndesktops);
+	free(workarea);
+	free(viewport);
 }
 
 // Update the _NET_CLIENT_LIST property for a screen.  This is a simple list of

@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2024 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // Client management: user window manipulation
@@ -230,7 +230,7 @@ void client_move_drag(struct client *c, unsigned button) {
 #ifdef INFOBANNER_MOVERESIZE
 	create_info_window(c);
 #endif
-	if (option.no_solid_drag) {
+	if (OPTION_NO_SOLID_DRAG) {
 		XGrabServer(display.dpy);
 		draw_outline(c);  // draw
 	}
@@ -242,7 +242,7 @@ void client_move_drag(struct client *c, unsigned button) {
 			case MotionNotify:
 				if (ev.xmotion.root != c->screen->root)
 					break;
-				if (option.no_solid_drag) {
+				if (OPTION_NO_SOLID_DRAG) {
 					draw_outline(c);  // erase
 					XUngrabServer(display.dpy);
 				}
@@ -254,7 +254,7 @@ void client_move_drag(struct client *c, unsigned button) {
 #ifdef INFOBANNER_MOVERESIZE
 				update_info_window(c);
 #endif
-				if (option.no_solid_drag) {
+				if (OPTION_NO_SOLID_DRAG) {
 					XSync(display.dpy, False);
 					XGrabServer(display.dpy);
 					draw_outline(c);  // draw
@@ -269,7 +269,7 @@ void client_move_drag(struct client *c, unsigned button) {
 			case ButtonRelease:
 				if (ev.xbutton.button != button)
 					continue;
-				if (option.no_solid_drag) {
+				if (OPTION_NO_SOLID_DRAG) {
 					draw_outline(c);  // erase
 					XUngrabServer(display.dpy);
 				}
@@ -277,7 +277,7 @@ void client_move_drag(struct client *c, unsigned button) {
 				remove_info_window();
 #endif
 				XUngrabPointer(display.dpy, CurrentTime);
-				if (option.no_solid_drag) {
+				if (OPTION_NO_SOLID_DRAG) {
 					// For solid drags, the client was
 					// moved with the mouse.  For non-solid
 					// drags, we need a final move/raise:

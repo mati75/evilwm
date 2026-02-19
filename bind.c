@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2025 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // Keyboard and button function definitions
@@ -178,8 +178,10 @@ static struct {
 	{ "mask1+7",                "vdesk,6" },
 	{ "mask1+8",                "vdesk,7" },
 	{ "mask1+a",                "vdesk,toggle" },
-	{ "mask1+Left",             "vdesk,relative+down" },
-	{ "mask1+Right",            "vdesk,relative+up" },
+	{ "mask1+Left",             "vdesk,relative+left" },
+	{ "mask1+Right",            "vdesk,relative+right" },
+	{ "mask1+Up",               "vdesk,relative+up" },
+	{ "mask1+Down",             "vdesk,relative+down" },
 
 	// Screen misc
 	{ "mask1+d",                "dock,toggle" },

@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2025 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // Screen management.
@@ -121,6 +121,7 @@ void screen_init(struct screen *s) {
 		X_ATOM(_NET_ACTIVE_WINDOW),
 		X_ATOM(_NET_WORKAREA),
 		X_ATOM(_NET_SUPPORTING_WM_CHECK),
+		X_ATOM(_NET_WM_FULL_PLACEMENT),
 
 		X_ATOM(_NET_CLOSE_WINDOW),
 		X_ATOM(_NET_MOVERESIZE_WINDOW),
@@ -152,7 +153,7 @@ void screen_init(struct screen *s) {
 		X_ATOM(_NET_FRAME_EXTENTS),
 	};
 
-	unsigned long num_desktops = option.vdesks;
+	unsigned long num_desktops = option.vdeskcolumns * option.vdeskrows;
 	unsigned long vdesk = s->vdesk;
 	unsigned long pid = getpid();
 

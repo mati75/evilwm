@@ -77,11 +77,11 @@
 .ie \\n(mP \{\
 .  nr PDFOUTLINE.FOLDLEVEL 3
 .  pdfview /PageMode /UseOutlines
-.  pdfinfo /Title evilwm 1.4
+.  pdfinfo /Title evilwm 1.5
 .  pdfinfo /Author Ciaran Anscomb
 .\}
 .
-.TH "evilwm" "1" "October 2022" "evilwm-1.4"
+.TH "evilwm" "1" "December 2025" "evilwm-1.5"
 .hy 0
 .nh
 .H1 NAME
@@ -120,8 +120,8 @@ enable snap-to-border support. \fIdistance\fR is the proximity in pixels to snap
 \f(CB\-\-wholescreen\fR
 ignore monitor geometry and use the whole screen dimensions. This is the old behaviour from before multi-monitor support was implemented, and may still be useful, eg when one large monitor is driven from multiple outputs.
 .TP
-\f(CB\-\-numvdesks\fR \fIvalue\fR
-number of virtual desktops to provide. Defaults to 8. Any extras will only be accessible by pagers or using Control+Alt+(Left/Right).
+\f(CB\-\-numvdesks\fR \fIcolumns\fR\[lB]x\fIrows\fR\[rB]
+virtual desktop layout, defaulting to \[aq]8x1\[aq]. Any more than eight virtual desktops will only be accessible by pagers or using Control+Alt+(Left/Right/Up/Down).
 .TP
 \f(CB\-\-nosoliddrag\fR
 draw a window outline while moving or resizing.
@@ -149,11 +149,17 @@ Subsequent \f(CB\-\-geometry\fR, \f(CB\-\-dock\fR, \f(CB\-\-vdesk\fR and \f(CB\-
 \f(CB\-g\fR, \f(CB\-\-geometry\fR \fIgeometry\fR
 apply a geometry (using a standard X geometry string) to applications matching the last \f(CB\-\-app\fR.
 .TP
+\f(CB\-\-ignore\-position\fR
+ignores the user-specified position for a matched application. Useful for some applications which abuse these hints to centre themselves without the user asking for it.
+.TP
+\f(CB\-\-ignore\-border\fR
+ignores the application-specified border width and use the default.
+.TP
 \f(CB\-\-dock\fR
 specify that application should be considered to be a dock, even if it lacks the appropriate property.
 .TP
-\f(CB\-v\fR, \f(CB\-\-vdesk\fR \fIvdesk\fR
-specify a default virtual desktop for applications matching the last \f(CB\-\-app\fR. Note that virtual desktops are numbered from zero.
+\f(CB\-v\fR, \f(CB\-\-vdesk\fR \fIcolumn\fR\[lB],\fIrow\fR\[rB]
+specify a default virtual desktop for applications matching the last \f(CB\-\-app\fR. If \fIrow\fR is not specified, \fIcolumn\fR may instead refer to an absolute virtual desktop number (ignoring layout). Note that column, row and absolute virtual desktop numbers are counted from zero.
 .TP
 \f(CB\-f\fR, \f(CB\-\-fixed\fR
 specify that application is to start with a fixed client window.
@@ -218,10 +224,16 @@ Fix or unfix current window. Fixed windows remain visible when you switch virtua
 Switch to specific virtual desktop (internally, desktops are numbered from zero, so this actually switches to desktops 0\[em]7; this only becomes important if you use application matching).
 .TP
 Left
-Switch to next lower numbered virtual desktop.
+Switch one virtual desktop to the left.
 .TP
 Right
-Switch to next higher numbered virtual desktop.
+Switch one virtual desktop to the right.
+.TP
+Up
+Switch one virtual desktop up (if more than one row was specified).
+.TP
+Down
+Switch one virtual desktop down (if more than one row was specified).
 .TP
 A
 Switch to the previously selected virtual desktop.
@@ -272,7 +284,7 @@ When bound to a key, if the \f(CBrelative\fR flag is specified, modifies the wid
 Start a terminal.
 .TP
 \f(CBvdesk\fR
-With the \f(CBtoggle\fR flag specified, switch to the previously visible vdesk. With the \f(CBrelative\fR flag set, either increase vdesk number (with \f(CBup\fR flag) or decrease it (with \f(CBdown\fR flag).
+With the \f(CBtoggle\fR flag specified, switch to the previously visible vdesk. With the \f(CBrelative\fR flag set, move within the virtual desktop layout according to the \f(CBleft\fR, \f(CBright\fR, \f(CBup\fR or \f(CBdown\fR flags.
 .IP
 If neither flag is specified, a numerical argument indicates which vdesk to switch to.
 .H1 DEFAULT BINDS
@@ -329,8 +341,10 @@ bind\ mask1+5=vdesk,4
 bind\ mask1+6=vdesk,5
 bind\ mask1+7=vdesk,6
 bind\ mask1+8=vdesk,7
-bind\ mask1+Left=vdesk,relative+down
-bind\ mask1+Right=vdesk,relative+up
+bind\ mask1+Left=vdesk,relative+left
+bind\ mask1+Right=vdesk,relative+right
+bind\ mask1+Up=vdesk,relative+up
+bind\ mask1+Down=vdesk,relative+down
 bind\ mask1+a=vdesk,toggle
 .EE
 .H1 FILES
@@ -338,7 +352,7 @@ bind\ mask1+a=vdesk,toggle
 \fI$HOME/.evilwmrc\fR
 .H1 LICENCE
 .PP
-Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
+Copyright (C) 1999-2025 Ciaran Anscomb <evilwm@6809.org.uk>
 .PP
 This is free software. You can do what you want to it, but if it breaks something, you get to pay for the counselling. The code was originally based on aewm, so this is distributed under the same terms, which follow.
 .H1 AEWM LICENCE

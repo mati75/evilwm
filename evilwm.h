@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2025 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // Default option values
@@ -32,8 +32,9 @@ struct options {
 	// Border width
 	int bw;
 
-	// Number of virtual desktops
-	unsigned vdesks;
+	// Number of rows and columns of virtual desktops
+	unsigned vdeskrows;
+	unsigned vdeskcolumns;
 
 	// Snap to border flag
 	int snap;
@@ -52,8 +53,10 @@ struct options {
 
 extern struct options option;
 
-#ifndef SOLIDDRAG
-# define option.no_solid_drag 1
+#ifdef SOLIDDRAG
+# define OPTION_NO_SOLID_DRAG (option.no_solid_drag)
+#else
+# define OPTION_NO_SOLID_DRAG (1)
 #endif
 
 extern unsigned numlockmask;
@@ -64,10 +67,12 @@ struct application {
 	char *res_name;
 	char *res_class;
 	int geometry_mask;
+	_Bool ignore_position;
+	_Bool ignore_border;
 	int x, y;
 	unsigned width, height;
 	int is_dock;
-	unsigned vdesk;
+	char *vdesk;
 };
 
 extern struct list *applications;

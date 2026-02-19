@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2025 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // Client management: manage new client.
@@ -31,7 +31,7 @@
 #include "screen.h"
 #include "util.h"
 
-static void init_geometry(struct client *c);
+static void init_geometry(struct client *c, _Bool ignore_position, _Bool ignore_border);
 static void reparent(struct client *c);
 
 // client_manage_new is called when a map request event for an unmanaged window
@@ -41,6 +41,7 @@ void client_manage_new(Window w, struct screen *s) {
 	struct client *c;
 	char *name;
 	XClassHint *class;
+	struct application *app = NULL;
 	unsigned window_type;
 
 	LOG_ENTER("client_manage_new(window=%lx)", (unsigned long)w);
@@ -108,8 +109,26 @@ void client_manage_new(Window w, struct screen *s) {
 
 	XUngrabServer(display.dpy);
 
+	// Find application-specific configuration for name/class:
+	class = XAllocClassHint();
+	if (class) {
+		XGetClassHint(display.dpy, w, class);
+		for (struct list *iter = applications; iter; iter = iter->next) {
+			struct application *a = iter->data;
+			// Does resource name and class match?
+			if ((!a->res_name || (class->res_name && !strcmp(class->res_name, a->res_name)))
+			    && (!a->res_class || (class->res_class && !strcmp(class->res_class, a->res_class)))) {
+				app = a;
+				break;
+			}
+		}
+		XFree(class->res_name);
+		XFree(class->res_class);
+		XFree(class);
+	}
+
 	update_window_type_flags(c, window_type);
-	init_geometry(c);
+	init_geometry(c, app ? app->ignore_position : 0, app ? app->ignore_border : 0);
 
 #ifdef DEBUG
 	{
@@ -131,52 +150,64 @@ void client_manage_new(Window w, struct screen *s) {
 	}
 #endif
 
-	// Read name/class information for client and check against list built
-	// with -app options.
-	class = XAllocClassHint();
-	if (class) {
-		XGetClassHint(display.dpy, w, class);
-		for (struct list *iter = applications; iter; iter = iter->next) {
-			struct application *a = iter->data;
-			// Does resource name and class match?
-			if ((!a->res_name || (class->res_name && !strcmp(class->res_name, a->res_name)))
-					&& (!a->res_class || (class->res_class && !strcmp(class->res_class, a->res_class)))) {
+	if (app) {
+		if (app->geometry_mask >= 0) {
+			// Override width or height?
+			if (app->geometry_mask & WidthValue)
+				c->width = app->width * c->width_inc;
+			if (app->geometry_mask & HeightValue)
+				c->height = app->height * c->height_inc;
 
-				// Override width or height?
-				if (a->geometry_mask & WidthValue)
-					c->width = a->width * c->width_inc;
-				if (a->geometry_mask & HeightValue)
-					c->height = a->height * c->height_inc;
-
-				// Override X or Y?
-				if (a->geometry_mask & XValue) {
-					if (a->geometry_mask & XNegative)
-						c->x = a->x + DisplayWidth(display.dpy, s->screen)-c->width-c->border;
-					else
-						c->x = a->x + c->border;
-				}
-				if (a->geometry_mask & YValue) {
-					if (a->geometry_mask & YNegative)
-						c->y = a->y + DisplayHeight(display.dpy, s->screen)-c->height-c->border;
-					else
-						c->y = a->y + c->border;
-				}
-
-				// XXX better way of updating window geometry?
-				client_moveresizeraise(c);
-
-				// Force treating this app as a dock?
-				if (a->is_dock)
-					c->is_dock = 1;
-
-				// Force app to specific vdesk?
-				if (a->vdesk != VDESK_NONE)
-					c->vdesk = a->vdesk;
+			// Override X or Y?
+			if (app->geometry_mask & XValue) {
+				if (app->geometry_mask & XNegative)
+					c->x = app->x + DisplayWidth(display.dpy, s->screen)-c->width-c->border;
+				else
+					c->x = app->x + c->border;
+			}
+			if (app->geometry_mask & YValue) {
+				if (app->geometry_mask & YNegative)
+					c->y = app->y + DisplayHeight(display.dpy, s->screen)-c->height-c->border;
+				else
+					c->y = app->y + c->border;
 			}
 		}
-		XFree(class->res_name);
-		XFree(class->res_class);
-		XFree(class);
+
+		// XXX better way of updating window geometry?
+		client_moveresizeraise(c);
+
+		// Force treating this app as a dock?
+		if (app->is_dock)
+			c->is_dock = 1;
+
+		if (app->vdesk && *(app->vdesk) == 'F') {
+			// Fix app
+			c->vdesk = VDESK_FIXED;
+		} else if (app->vdesk) {
+			// Force app to specific vdesk
+			char *next = NULL;
+			long col = strtol(app->vdesk, &next, 10);
+			long row = 0;
+			if (col < 0)
+				col = 0;
+			if (next && *next && strchr(",+", *next)) {
+				// X,Y format
+				row = strtol(next+1, NULL, 10);
+				if (col > VDESK_MAX_COL)
+					col = VDESK_MAX_COL;
+				if (row < 0)
+					row = 0;
+				if (row > VDESK_MAX_ROW)
+					row = VDESK_MAX_ROW;
+				c->vdesk = row * option.vdeskcolumns + col;
+			} else {
+				// Absolute vdesk number
+				if (col >= option.vdeskcolumns * option.vdeskrows) {
+					col = (option.vdeskcolumns * option.vdeskrows) - 1;
+				}
+				c->vdesk = col;
+			}
+		}
 	}
 
 	// Set EWMH property on client advertising WM features
@@ -215,12 +246,12 @@ void client_manage_new(Window w, struct screen *s) {
 
 // Fetches various hints to determine a window's initial geometry.
 
-static void init_geometry(struct client *c) {
+static void init_geometry(struct client *c, _Bool ignore_position, _Bool ignore_border) {
 	unsigned long nitems;
 	XWindowAttributes attr;
 
 	// Normal border size from MWM hints
-	c->normal_border = window_normal_border(c->window);
+	c->normal_border = ignore_border ? option.bw : window_normal_border(c->window);
 
 	// Possible get a value for initial virtual desktop from EWMH hint
 	unsigned long *lprop;
@@ -298,7 +329,7 @@ static void init_geometry(struct client *c) {
 	// XXX: if an existing window would be mapped off the screen, would it
 	// be sensible to move it somewhere visible?
 
-	if ((attr.map_state == IsViewable) || (size_flags & USPosition)) {
+	if ((attr.map_state == IsViewable) || (!ignore_position && (size_flags & USPosition))) {
 		c->x = attr.x;
 		c->y = attr.y;
 	} else {

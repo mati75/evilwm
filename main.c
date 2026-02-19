@@ -1,5 +1,5 @@
 /* evilwm - minimalist window manager for X11
- * Copyright (C) 1999-2022 Ciaran Anscomb <evilwm@6809.org.uk>
+ * Copyright (C) 1999-2025 Ciaran Anscomb <evilwm@6809.org.uk>
  * see README for license and other details. */
 
 // main() function parses options and kicks off the main event loop.
@@ -45,9 +45,12 @@ unsigned numlockmask = 0;
 
 struct list *applications = NULL;
 
+static void set_numvdesks(const char *arg);
 static void set_bind(const char *arg);
 static void set_app(const char *arg);
 static void set_app_geometry(const char *arg);
+static void set_app_ignore_position(void);
+static void set_app_ignore_border(void);
 static void set_app_dock(void);
 static void set_app_vdesk(const char *arg);
 static void set_app_fixed(void);
@@ -55,7 +58,7 @@ static void set_app_fixed(void);
 static struct xconfig_option evilwm_options[] = {
 	{ XCONFIG_STRING,   "fn",           { .s = &option.font } },
 	{ XCONFIG_STRING,   "display",      { .s = &option.display } },
-	{ XCONFIG_UINT,     "numvdesks",    { .u = &option.vdesks } },
+	{ XCONFIG_CALL_1,   "numvdesks",    { .c1 = &set_numvdesks } },
 	{ XCONFIG_STRING,   "fg",           { .s = &option.fg } },
 	{ XCONFIG_STRING,   "bg",           { .s = &option.bg } },
 	{ XCONFIG_STRING,   "fc",           { .s = &option.fc } },
@@ -70,6 +73,8 @@ static struct xconfig_option evilwm_options[] = {
 	{ XCONFIG_CALL_1,   "app",          { .c1 = &set_app } },
 	{ XCONFIG_CALL_1,   "geometry",     { .c1 = &set_app_geometry } },
 	{ XCONFIG_CALL_1,   "g",            { .c1 = &set_app_geometry } },
+	{ XCONFIG_CALL_1,   "ignore-position", { .c0 = &set_app_ignore_position } },
+	{ XCONFIG_CALL_1,   "ignore-border", { .c0 = &set_app_ignore_border } },
 	{ XCONFIG_CALL_0,   "dock",         { .c0 = &set_app_dock } },
 	{ XCONFIG_CALL_1,   "vdesk",        { .c1 = &set_app_vdesk } },
 	{ XCONFIG_CALL_1,   "v",            { .c1 = &set_app_vdesk } },
@@ -95,10 +100,10 @@ static void helptext(void) {
 "  --fg COLOUR         colour of active window frames [" DEF_FG "]\n"
 "  --fc COLOUR         colour of fixed window frames [" DEF_FC "]\n"
 "  --bg COLOUR         colour of inactive window frames [" DEF_BG "]\n"
-"  --bw PIXELS         window border width [" xstr(DEF_BW) "]\n"
+"  --bw PIXELS         default window border width [" xstr(DEF_BW) "]\n"
 "  --snap PIXELS       snap distance when dragging windows [0; disabled]\n"
 "  --wholescreen       ignore monitor geometries when maximising\n"
-"  --numvdesks N       total number of virtual desktops [8]\n"
+"  --numvdesks C[xR]   logical virtual desktop geometry (columns x rows)\n"
 #ifdef SOLIDDRAG
 "  --nosoliddrag       draw outline when moving or resizing\n"
 #endif
@@ -108,11 +113,13 @@ static void helptext(void) {
 "  --bind CTL[=FUNC]   bind (or unbind) input to window manager function\n"
 
 "\n Application matching options:\n"
-"  --app NAME/CLASS      match application by instance name & class\n"
-"    -g, --geometry GEOM   apply X geometry to matched application\n"
-"        --dock            treat matched app as a dock\n"
-"    -v, --vdesk VDESK     move app to numbered vdesk (indexed from 0)\n"
-"    -f, --fixed           matched app should start fixed\n"
+"  --app NAME/CLASS        match application by instance name & class\n"
+"    -g, --geometry GEOM     apply X geometry to matched application\n"
+"        --ignore-position   ignore user-specified position for app\n"
+"        --ignore-border     ignore application-specified border width\n"
+"        --dock              treat matched app as a dock\n"
+"    -v, --vdesk VDESK       move app to numbered vdesk (indexed from 0)\n"
+"    -f, --fixed             matched app should start fixed\n"
 
 "\n Other options:\n"
 "  -h, --help      display this help and exit\n"
@@ -142,7 +149,7 @@ static const char *default_options[] = {
 	"bg " DEF_BG,
 	"bw " xstr(DEF_BW),
 	"fc " DEF_FC,
-	"numvdesks 8",
+	"numvdesks 8x1",
 };
 #define NUM_DEFAULT_OPTIONS (sizeof(default_options)/sizeof(default_options[0]))
 
@@ -249,10 +256,9 @@ int main(int argc, char *argv[]) {
 		while (applications) {
 			struct application *app = applications->data;
 			applications = list_delete(applications, app);
-			if (app->res_name)
-				free(app->res_name);
-			if (app->res_class)
-				free(app->res_class);
+			free(app->res_name);
+			free(app->res_class);
+			free(app->vdesk);
 			free(app);
 		}
 
@@ -270,6 +276,21 @@ int main(int argc, char *argv[]) {
 
 // Option parsing callbacks
 
+static void set_numvdesks(const char *arg) {
+	char *next = NULL;
+	option.vdeskcolumns = strtol(arg, &next, 10);
+	option.vdeskrows = 1;
+	if (next && *next && strchr("xX*,", *next)) {
+		option.vdeskrows = strtol(next+1, NULL, 10);;
+	}
+	if (option.vdeskcolumns < 1) {
+		option.vdeskcolumns = 1;
+	}
+	if (option.vdeskrows < 1) {
+		option.vdeskrows = 1;
+	}
+}
+
 static void set_bind(const char *arg) {
 	char *argdup = xstrdup(arg);
 	if (!argdup)
@@ -282,8 +303,9 @@ static void set_app(const char *arg) {
 	char *tmp;
 	new->res_name = new->res_class = NULL;
 	new->geometry_mask = 0;
+	new->ignore_position = 0;
 	new->is_dock = 0;
-	new->vdesk = VDESK_NONE;
+	new->vdesk = NULL;
 	if ((tmp = strchr(arg, '/'))) {
 		*(tmp++) = 0;
 	}
@@ -304,6 +326,20 @@ static void set_app_geometry(const char *arg) {
 	}
 }
 
+static void set_app_ignore_position(void) {
+	if (applications) {
+		struct application *app = applications->data;
+		app->ignore_position = 1;
+	}
+}
+
+static void set_app_ignore_border(void) {
+	if (applications) {
+		struct application *app = applications->data;
+		app->ignore_border = 1;
+	}
+}
+
 static void set_app_dock(void) {
 	if (applications) {
 		struct application *app = applications->data;
@@ -312,17 +348,18 @@ static void set_app_dock(void) {
 }
 
 static void set_app_vdesk(const char *arg) {
-	unsigned v = strtoul(arg, NULL, 0);
-	if (applications && valid_vdesk(v)) {
+	if (applications) {
 		struct application *app = applications->data;
-		app->vdesk = v;
+		free(app->vdesk);
+		app->vdesk = xstrdup(arg);
 	}
 }
 
 static void set_app_fixed(void) {
 	if (applications) {
 		struct application *app = applications->data;
-		app->vdesk = VDESK_FIXED;
+		free(app->vdesk);
+		app->vdesk = xstrdup("F");  // magic value
 	}
 }
 

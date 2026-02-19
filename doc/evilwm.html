@@ -70,7 +70,7 @@ table td, table th { border-left: solid thin; border-right: solid thin; border-b
 
 <body>
 
-<h1 man:date='October 2022' man:section='1' man:dist='evilwm-1.4' pdf:title="evilwm 1.4" pdf:author="Ciaran Anscomb">evilwm</h1>
+<h1 man:date='December 2025' man:section='1' man:dist='evilwm-1.5' pdf:title="evilwm 1.5" pdf:author="Ciaran Anscomb">evilwm</h1>
 
 
 <h2 id='name'>NAME</h2>
@@ -134,11 +134,11 @@ pixels to snap to.
 old behaviour from before multi-monitor support was implemented, and may still
 be useful, eg when one large monitor is driven from multiple outputs.
 
-<dt><code>--numvdesks</code> <var>value</var>
+<dt><code>--numvdesks</code> <var>columns</var>[x<var>rows</var>]
 
-<dd>number of virtual desktops to provide.  Defaults to 8.  Any extras will
-only be accessible by pagers or using
-<kbd>Control</kbd>+<kbd>Alt</kbd>+(<kbd>Left</kbd>/<kbd>Right</kbd>).
+<dd>virtual desktop layout, defaulting to '8x1'. Any more than eight virtual
+desktops will only be accessible by pagers or using
+<kbd>Control</kbd>+<kbd>Alt</kbd>+(<kbd>Left</kbd>/<kbd>Right</kbd>/<kbd>Up</kbd>/<kbd>Down</kbd>).
 
 <dt><code>--nosoliddrag</code>
 
@@ -195,15 +195,27 @@ use the <em>xprop</em> tool to extract the <em>WM_CLASS</em> property).
 <dd>apply a geometry (using a standard X geometry string) to applications
 matching the last <code>--app</code>.
 
+<dt><code>--ignore-position</code>
+
+<dd>ignores the user-specified position for a matched application.  Useful for
+some applications which abuse these hints to centre themselves without the user
+asking for it.
+
+<dt><code>--ignore-border</code>
+
+<dd>ignores the application-specified border width and use the default.
+
 <dt><code>--dock</code>
 
 <dd>specify that application should be considered to be a dock, even if it
 lacks the appropriate property.
 
-<dt><code>-v</code>, <code>--vdesk</code> <var>vdesk</var>
+<dt><code>-v</code>, <code>--vdesk</code> <var>column</var>[,<var>row</var>]
 
 <dd>specify a default virtual desktop for applications matching the last
-<code>--app</code>.  Note that virtual desktops are numbered from zero.
+<code>--app</code>.  If <var>row</var> is not specified, <var>column</var> may
+instead refer to an absolute virtual desktop number (ignoring layout). Note
+that column, row and absolute virtual desktop numbers are counted from zero.
 
 <dt><code>-f</code>, <code>--fixed</code>
 
@@ -321,11 +333,19 @@ you use application matching).
 
 <dt><kbd>Left</kbd>
 
-<dd>Switch to next lower numbered virtual desktop.
+<dd>Switch one virtual desktop to the left.
 
 <dt><kbd>Right</kbd>
 
-<dd>Switch to next higher numbered virtual desktop.
+<dd>Switch one virtual desktop to the right.
+
+<dt><kbd>Up</kbd>
+
+<dd>Switch one virtual desktop up (if more than one row was specified).
+
+<dt><kbd>Down</kbd>
+
+<dd>Switch one virtual desktop down (if more than one row was specified).
 
 <dt><kbd>A</kbd>
 
@@ -414,9 +434,9 @@ both.
 <dt><code>vdesk</code>
 
 <dd>With the <code>toggle</code> flag specified, switch to the previously
-visible vdesk.  With the <code>relative</code> flag set, either increase vdesk
-number (with <code>up</code> flag) or decrease it (with <code>down</code>
-flag).
+visible vdesk.  With the <code>relative</code> flag set, move within the
+virtual desktop layout according to the <code>left</code>, <code>right</code>,
+<code>up</code> or <code>down</code> flags.
 
 <p>If neither flag is specified, a numerical argument indicates which vdesk to
 switch to.
@@ -488,8 +508,10 @@ bind mask1+5=vdesk,4
 bind mask1+6=vdesk,5
 bind mask1+7=vdesk,6
 bind mask1+8=vdesk,7
-bind mask1+Left=vdesk,relative+down
-bind mask1+Right=vdesk,relative+up
+bind mask1+Left=vdesk,relative+left
+bind mask1+Right=vdesk,relative+right
+bind mask1+Up=vdesk,relative+up
+bind mask1+Down=vdesk,relative+down
 bind mask1+a=vdesk,toggle
 </pre>
 
@@ -501,7 +523,7 @@ bind mask1+a=vdesk,toggle
 
 <h2 id='licence'>LICENCE</h2>
 
-<p>Copyright (C) 1999-2022 Ciaran Anscomb &lt;evilwm@6809.org.uk&gt;
+<p>Copyright (C) 1999-2025 Ciaran Anscomb &lt;evilwm@6809.org.uk&gt;
 
 <p>This is free software.  You can do what you want to it, but if it breaks
 something, you get to pay for the counselling.  The code was originally based
