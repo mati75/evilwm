@@ -1,3 +1,12 @@
+Version 1.5, Fri Dec 19 2025
+
+  * Fix compilation with SOLIDDRAG undefined [jake]
+  * Allow specifying a matrix for vdesk organisation [Stefan Uhl]
+  * Allow specifying virtual desktop for application in X,Y format.
+  * EWMH: list viewport and workarea for each virtual desktop.
+  * Add --ignore-position option; ignores USPosition for matched app.
+  * Add --ignore-border option; ignores application-specified border width.
+
 Version 1.4.3, Sat Mar  9 2024
 
   * Force dock windows to have _NET_WM_STATE_FOCUSED
