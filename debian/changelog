@@ -7,8 +7,9 @@ evilwm (1.5-1) unstable; urgency=medium
     + Bump standards version to 4.7.3.
     + Drop Priority field
     + Drop Rules-Requires-Root field
+  * Update d/copyright.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 19 Feb 2026 11:44:39 +0100
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 19 Feb 2026 12:22:31 +0100
 
 evilwm (1.4.3-1) unstable; urgency=medium
 
