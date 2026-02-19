@@ -3,6 +3,10 @@ evilwm (1.5-1) UNRELEASED; urgency=medium
   * New upstream release.
   * Refresh patches.
   * Update d/watch to version 5.
+  * d/control:
+    + Bump standards version to 4.7.3.
+    + Drop Priority field
+    + Drop Rules-Requires-Root field
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 19 Feb 2026 10:43:46 +0100
 
